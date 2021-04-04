@@ -79,7 +79,7 @@ struct UserDefaultOperation {
     
     func loadUserDefault() -> [MyFavorite] {
         guard let savedValue = userDefault.data(forKey: key),
-              let value = try? decoder.decode([MyFavorite].self, from: savedValue) else { abort() }
+              let value = try? decoder.decode([MyFavorite].self, from: savedValue) else { return [MyFavorite]() }
         return value
     }
 }

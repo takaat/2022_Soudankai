@@ -49,7 +49,7 @@ struct ShowMeigen: View{
                 else{
                     isFavorite = true
                     // お気に入りに登録する処理
-//                    myFavorites = userDefaultOperation.loadUserDefault()
+                    myFavorites = userDefaultOperation.loadUserDefault()
                     myFavorite.favoriteMeigen = meigen.meigen
                     myFavorite.favoriteAuther = meigen.auther
                     myFavorites.append(myFavorite)
