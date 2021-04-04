@@ -41,13 +41,43 @@ struct MapView: UIViewRepresentable{
     @Binding var setword: String
     var locationManeger = CLLocationManager()
     
-    func makeCoordinator() {
-        locationManeger.requestWhenInUseAuthorization()
-//        locationManeger.delegate = Coordinator()
-    }
+//    class Coordinator: NSObject,MKMapViewDelegate {
+//
+//        let parent: MapView
+//
+//        init(_ parent: MapView){
+//            self.parent = parent
+//        }
+//
+//        func mapViewWillStartLoadingMap(_ mapView: MKMapView) {
+//
+//        }
+//
+//        func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
+//
+//        }
+//    }
+//
+//    func makeCoordinator() -> Coordinator {
+//        Coordinator(self)
+//    }
+//
+//    func makeCoordinator() {
+//        //もしかしたらここにlocationManeger.requestWhenInUseAuthorization()を入れるかも。
+//    }
     
     func makeUIView(context: Context) -> MKMapView {
-        MKMapView()
+        locationManeger.requestWhenInUseAuthorization()
+        let mapView = MKMapView()
+        let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+        let region = MKCoordinateRegion(center: mapView.userLocation.coordinate, span: span)
+        // ここで照準を合わせている
+        mapView.region = region
+//        mapView.setRegion(region, animated: true)
+        mapView.showsUserLocation = true
+        mapView.setUserTrackingMode(.follow, animated: true)
+//        mapView.delegate = context.coordinator
+        return mapView
     }
 
     func updateUIView(_ uiView: MKMapView, context: Context) {
