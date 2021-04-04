@@ -11,6 +11,7 @@
 		BF10F6182619940D007F1C68 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF10F6172619940D007F1C68 /* ContentView.swift */; };
 		BF10F61A26199412007F1C68 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF10F61926199412007F1C68 /* Assets.xcassets */; };
 		BF10F61D26199412007F1C68 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF10F61C26199412007F1C68 /* Preview Assets.xcassets */; };
+		BF10F627261995A3007F1C68 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF10F626261995A3007F1C68 /* CoreLocation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +21,7 @@
 		BF10F61926199412007F1C68 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BF10F61C26199412007F1C68 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		BF10F61E26199412007F1C68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BF10F626261995A3007F1C68 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -27,6 +29,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF10F627261995A3007F1C68 /* CoreLocation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -38,6 +41,7 @@
 			children = (
 				BF10F6142619940D007F1C68 /* MeigenSupplement */,
 				BF10F6132619940D007F1C68 /* Products */,
+				BF10F625261995A3007F1C68 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -67,6 +71,14 @@
 				BF10F61C26199412007F1C68 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		BF10F625261995A3007F1C68 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BF10F626261995A3007F1C68 /* CoreLocation.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
