@@ -22,6 +22,7 @@ struct LocationView: View {
             //ここにマップビューを入れること
             MapView(setword: $setword)
                 .padding()
+                .onLongPressGesture(perform: <#T##() -> Void#>)//ここにコードを入れる。
             Button("位置情報による発火準備", action: {
                 //ここに通知を設定すること})
                 LocationNotification(setword: $setword).basedOnLocationNotification()
@@ -82,12 +83,15 @@ struct MapView: UIViewRepresentable{
 
     func updateUIView(_ uiView: MKMapView, context: Context) {
         let geocoder = CLGeocoder()
+        let pin = MKPointAnnotation()
         geocoder.geocodeAddressString(setword, completionHandler: {(placemarks,error) in
             guard let location = placemarks?.first?.location else{
                 return
             }
             let targetlocation = location.coordinate
+            pin.coordinate = targetlocation
             uiView.region = MKCoordinateRegion(center: targetlocation, latitudinalMeters: 500, longitudinalMeters: 500)
+            uiView.addAnnotation(pin)
         })
     }
 
