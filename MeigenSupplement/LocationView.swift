@@ -13,21 +13,50 @@ struct LocationView: View {
     
     @State var inputword = ""
     @State var setword = ""
+    @State var editting = false
     
     var body: some View {
-        VStack{
-            TextField("場所を入力してください。", text: $inputword,onCommit: {setword = inputword})
-                .fixedSize()
-                .padding()
-            //ここにマップビューを入れること
+        
+        ZStack{
+            
             MapView(setword: $setword)
-                .padding()
-                .onLongPressGesture(perform: <#T##() -> Void#>)//ここにコードを入れる。
-            Button("位置情報による発火準備", action: {
-                //ここに通知を設定すること})
-                LocationNotification(setword: $setword).basedOnLocationNotification()
-            })
-        }
+                .ignoresSafeArea()
+            
+            VStack{
+    
+                HStack(alignment: .bottom){
+                    
+                    TextField("場所または住所を検索します。", text: $inputword,
+                              onEditingChanged: { begin in
+                        /// 入力開始処理
+                        if begin {
+                            self.editting = true    // 編集フラグをオン
+                            /// 入力終了処理
+                        } else {
+                            self.editting = false   // 編集フラグをオフ
+                        }
+                    },onCommit: {setword = inputword})
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .padding()
+                        .shadow(color: editting ? .blue : .clear, radius: 3)
+                    
+                    Button("登録", action: {
+                        //ここに通知を設定すること})
+                        LocationNotification(setword: $setword).basedOnLocationNotification()
+                    })
+                    .disabled(setword.isEmpty)
+                    .frame(width: 60, height: 36)
+//                    .foregroundColor(Color(.systemGray))
+                    .background(Color(.white))
+                    .cornerRadius(24)
+                    .padding()
+                }
+                
+                Spacer()
+                
+            }
+            
+        }.navigationBarTitleDisplayMode(.inline)
     }
 }
 
@@ -39,45 +68,18 @@ struct LocationView_Previews: PreviewProvider {
 
 struct MapView: UIViewRepresentable{
     
+    typealias UIViewType = MKMapView
     @Binding var setword: String
     var locationManeger = CLLocationManager()
-    
-//    class Coordinator: NSObject,MKMapViewDelegate {
-//
-//        let parent: MapView
-//
-//        init(_ parent: MapView){
-//            self.parent = parent
-//        }
-//
-//        func mapViewWillStartLoadingMap(_ mapView: MKMapView) {
-//
-//        }
-//
-//        func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
-//
-//        }
-//    }
-//
-//    func makeCoordinator() -> Coordinator {
-//        Coordinator(self)
-//    }
-//
-//    func makeCoordinator() {
-//        //もしかしたらここにlocationManeger.requestWhenInUseAuthorization()を入れるかも。
-//    }
     
     func makeUIView(context: Context) -> MKMapView {
         locationManeger.requestWhenInUseAuthorization()
         let mapView = MKMapView()
         let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
         let region = MKCoordinateRegion(center: mapView.userLocation.coordinate, span: span)
-        // ここで照準を合わせている
-        mapView.region = region
-//        mapView.setRegion(region, animated: true)
+        mapView.setRegion(region, animated: true)
         mapView.showsUserLocation = true
         mapView.setUserTrackingMode(.follow, animated: true)
-//        mapView.delegate = context.coordinator
         return mapView
     }
 
@@ -86,7 +88,9 @@ struct MapView: UIViewRepresentable{
         let pin = MKPointAnnotation()
         geocoder.geocodeAddressString(setword, completionHandler: {(placemarks,error) in
             guard let location = placemarks?.first?.location else{
-                return
+                let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+                let region = MKCoordinateRegion(center: uiView.userLocation.coordinate, span: span)
+                return uiView.setRegion(region, animated: true)
             }
             let targetlocation = location.coordinate
             pin.coordinate = targetlocation
@@ -94,14 +98,8 @@ struct MapView: UIViewRepresentable{
             uiView.addAnnotation(pin)
         })
     }
-
-//    class Coordinator: NSObject,CLLocationManagerDelegate{
-//
-//        func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-//            return
-//        }
-//    }
 }
 
+ 
 
 
