@@ -33,12 +33,12 @@ struct FavoriteView: View {
                 .onMove(perform: rowReplace)
                 .onDelete(perform: rowRemove)
             }
+            .navigationBarItems(trailing: EditButton())
             
         }
         .onAppear{
             myFavorites = userDefaultOperation.loadUserDefault()
         }
-        .navigationBarItems(trailing: EditButton())
         .navigationBarTitleDisplayMode(.inline)
     }
     // 行入れ替え処理

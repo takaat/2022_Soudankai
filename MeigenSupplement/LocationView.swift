@@ -21,6 +21,11 @@ struct LocationView: View {
             
             MapView(setword: $setword)
                 .ignoresSafeArea()
+                .onTapGesture {
+                    if editting == true{
+                        editting = false
+                    }
+                }
             
             VStack{
     
@@ -46,9 +51,8 @@ struct LocationView: View {
                     })
                     .disabled(setword.isEmpty)
                     .frame(width: 60, height: 36)
-//                    .foregroundColor(Color(.systemGray))
-                    .background(Color(.white))
-                    .cornerRadius(24)
+                    .background(Color(.systemBackground))
+                    .cornerRadius(8)
                     .padding()
                 }
                 
