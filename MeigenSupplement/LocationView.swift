@@ -21,28 +21,32 @@ struct LocationView: View {
             
             MapView(setword: $setword)
                 .ignoresSafeArea()
-                .onTapGesture {
-                    if editting == true{
-                        editting = false
-                    }
-                }
+            //                .onTapGesture {
+            //                    if editting == true{
+            //                        editting = false
+            //                    }
+            //                }
             
             VStack{
-    
-                HStack(alignment: .bottom){
-                    
-                    TextField("場所または住所を検索します。", text: $inputword,
-                              onEditingChanged: { begin in
-                        /// 入力開始処理
-                        if begin {
-                            self.editting = true    // 編集フラグをオン
-                            /// 入力終了処理
-                        } else {
-                            self.editting = false   // 編集フラグをオフ
-                        }
-                    },onCommit: {setword = inputword})
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .padding()
+                
+                //                HStack(alignment: .bottom){
+                //
+                //                    TextField("場所または住所を検索します。", text: $inputword,
+                //                              onEditingChanged: { begin in
+                //                        /// 入力開始処理
+                //                        if begin {
+                //                            self.editting = true    // 編集フラグをオン
+                //                            /// 入力終了処理
+                //                        } else {
+                //                            self.editting = false   // 編集フラグをオフ
+                //                        }
+                //                    },onCommit: {setword = inputword})
+                //                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                //                        .padding()
+                HStack {
+                    SearchBar(setword: $setword, editting: $editting)
+                        .cornerRadius(8)
+                        .padding(.leading, 3.0)
                         .shadow(color: editting ? .blue : .clear, radius: 3)
                     
                     Button("登録", action: {
@@ -53,13 +57,11 @@ struct LocationView: View {
                     .frame(width: 60, height: 36)
                     .background(Color(.systemBackground))
                     .cornerRadius(8)
-                    .padding()
+                    .padding(.trailing, 3.0)
                 }
                 
                 Spacer()
-                
             }
-            
         }.navigationBarTitleDisplayMode(.inline)
     }
 }
@@ -104,6 +106,54 @@ struct MapView: UIViewRepresentable{
     }
 }
 
- 
+struct SearchBar: UIViewRepresentable {
+    
+    typealias UIViewType = UISearchBar
+    @Binding var setword: String
+    @Binding var editting: Bool
+    
+    func makeUIView(context: Context) -> UISearchBar {
+        
+        let searchbar = UISearchBar()
+//        searchbar.showsCancelButton = true
+        searchbar.placeholder = "場所または住所を検索します。"
+        searchbar.searchBarStyle = .prominent
+        searchbar.tintColor = .systemBackground
+        searchbar.delegate = context.coordinator
+        return searchbar
+    }
+    
+    func updateUIView(_ uiView: UISearchBar, context: Context) {
+        return
+    }
+    
+    func makeCoordinator() ->  SearchBar.Coordinator {
+        SearchBar.Coordinator(self)
+    }
+    
+    class Coordinator: NSObject,UISearchBarDelegate{
+        
+        var parent: SearchBar!
+        
+        init(_ parent: SearchBar){
+            self.parent = parent
+        }
+        
+        func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+            parent.editting = true
+        }
+
+        func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+            guard let setword = searchBar.text else{
+                return searchBar.text = ""
+            }
+            parent.setword = setword
+        }
+        
+        func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+            parent.setword = ""
+        }
+    }
+}
 
 
