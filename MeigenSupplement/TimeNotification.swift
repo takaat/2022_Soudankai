@@ -13,10 +13,12 @@ struct TimeNotification {     //通知に名言を載せるなら、クラスに
     
    // @ObservedObject var meigen = Meigen()
     @Binding var date: Date
+    @Binding var repeatTime: Int
    
     
-    init(date: Binding<Date>) {
+    init(date: Binding<Date>,repeatTime: Binding<Int>) {
         self._date = date
+        self._repeatTime = repeatTime
     }
     
     func basedOnTimeNotification(){//関数の中でインスタンス化しないとエラーになる。
@@ -35,16 +37,30 @@ struct TimeNotification {     //通知に名言を載せるなら、クラスに
         let categories = UNNotificationCategory(identifier: "action", actions: [open,cancel], intentIdentifiers: [])
         center.setNotificationCategories([categories])
         
-        let component = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: date)
+        //repeatTimeの値によってcomponentとtrigerを分ける。
+        var component = DateComponents()
+        var repeats: Bool = false
         
-        // ローカル通知リクエストを作成
-        let trigger = UNCalendarNotificationTrigger(dateMatching: component, repeats: false)
+        switch repeatTime {
+        case 0: //繰り返しなし
+            component = Calendar.current.dateComponents([.year, .month, .day, .weekday,.hour, .minute], from: date)
+            repeats = false
+        case 1: //毎日
+            component = Calendar.current.dateComponents([.hour, .minute], from: date)
+            repeats = true
+        case 2: //毎週
+            component = Calendar.current.dateComponents([.weekday,.hour, .minute], from: date)
+            repeats = true
+        default:
+            break
+        }
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: component, repeats: repeats)
         // ユニークなIDを作る
-        let identifier = NSUUID().uuidString
+        let identifier = UUID().description
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
         
         // ローカル通知リクエストを登録
-        
         center.add(request){ (error : Error?) in
             if let error = error {
                 print(error.localizedDescription)

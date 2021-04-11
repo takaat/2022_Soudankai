@@ -14,6 +14,7 @@ struct LocationView: View {
     @State var inputword = ""
     @State var setword = ""
     @State var editting = false
+    @State var repeatLocation = false
     
     var body: some View {
         
@@ -21,11 +22,9 @@ struct LocationView: View {
             
             MapView(setword: $setword)
                 .ignoresSafeArea()
-            //                .onTapGesture {
-            //                    if editting == true{
-            //                        editting = false
-            //                    }
-            //                }
+                .onTapGesture {
+                    UIApplication.shared.closeKeyboard()
+                }
             
             VStack{
                 
@@ -43,21 +42,42 @@ struct LocationView: View {
                 //                    },onCommit: {setword = inputword})
                 //                        .textFieldStyle(RoundedBorderTextFieldStyle())
                 //                        .padding()
-                HStack {
+                VStack {
                     SearchBar(setword: $setword, editting: $editting)
                         .cornerRadius(8)
-                        .padding(.leading, 3.0)
+                        .padding([.top, .leading, .trailing])
                         .shadow(color: editting ? .blue : .clear, radius: 3)
                     
-                    Button("登録", action: {
-                        //ここに通知を設定すること})
-                        LocationNotification(setword: $setword).basedOnLocationNotification()
-                    })
-                    .disabled(setword.isEmpty)
-                    .frame(width: 60, height: 36)
+                    
+//                    .background(Color(.systemBackground))
+//                    .cornerRadius(8)
+                    Group {
+                        HStack{
+                            Button("登録", action: {
+                                //ここに通知を設定すること})
+                                LocationNotification(setword: $setword,repeatLocation: $repeatLocation).basedOnLocationNotification()
+                            })
+                            .disabled(setword.isEmpty)
+//                            .frame(width: 60, height: 36)
+////                            .background(Color(.systemBackground))
+//                            .cornerRadius(8)
+                            .padding(.leading, 25.0)
+                            Spacer()
+                        
+                            
+                            Image(systemName: "repeat")
+                            Text("繰り返し")
+                            Toggle("繰り返し", isOn: $repeatLocation)
+                                .labelsHidden()
+                                .padding(.trailing)
+                            
+                        }
+                    }
+                    .frame(width: 355, height:50 )
+//                    .padding()
                     .background(Color(.systemBackground))
                     .cornerRadius(8)
-                    .padding(.trailing, 3.0)
+                    
                 }
                 
                 Spacer()
@@ -115,7 +135,6 @@ struct SearchBar: UIViewRepresentable {
     func makeUIView(context: Context) -> UISearchBar {
         
         let searchbar = UISearchBar()
-//        searchbar.showsCancelButton = true
         searchbar.placeholder = "場所または住所を検索します。"
         searchbar.searchBarStyle = .prominent
         searchbar.tintColor = .systemBackground
@@ -133,7 +152,7 @@ struct SearchBar: UIViewRepresentable {
     
     class Coordinator: NSObject,UISearchBarDelegate{
         
-        var parent: SearchBar!
+        var parent: SearchBar
         
         init(_ parent: SearchBar){
             self.parent = parent
@@ -156,4 +175,9 @@ struct SearchBar: UIViewRepresentable {
     }
 }
 
+extension UIApplication {
+    func closeKeyboard() {
+        sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
 

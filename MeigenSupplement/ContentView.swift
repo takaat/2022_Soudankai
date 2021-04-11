@@ -11,7 +11,7 @@ import UserNotifications
 struct ContentView: View {
     
     @ObservedObject var meigen = Meigen()
-    @State var date: Date = Date()
+//    @State var date: Date = Date()
 //    @State var inputword = ""
 //    @State var setword = ""
     
@@ -55,15 +55,18 @@ struct ContentView: View {
                 Text(meigen.auther)
                     .padding()
                 
-                DatePicker("日時を選んでください", selection: $date)
+//                DatePicker("日時を選んでください", selection: $date)
+//                    .padding()
+                NavigationLink("日時による通知へ", destination: AddTimeNotification())
                     .padding()
+//                Button("発火準備", action: {let timenotification = TimeNotification(date: $date,repeatTime: $repeatTime)
+//                    timenotification.basedOnTimeNotification()
+//                })
+//                .padding()
                 
-                Button("発火準備", action: {let timenotification = TimeNotification(date: $date)
-                    timenotification.basedOnTimeNotification()
-                })
-                .padding()
+                NavigationLink("位置情報による通知へ", destination: LocationView()).padding()
                 
-                NavigationLink("位置情報による通知へ", destination: LocationView())
+                Button("通知一覧の取得", action: {getPendingNotification()})
                 
 //                TextField("input",text: $inputword,onCommit: {setword = inputword})
 //                    .padding()
@@ -88,4 +91,19 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
     }
+}
+
+func getPendingNotification(){
+    let center = UNUserNotificationCenter.current()
+    center.getPendingNotificationRequests(completionHandler: {arrReq in
+        for req in arrReq{
+            
+            guard let trigger = req.trigger else { return }
+            
+//            guard let catrigger = trigger as? UNCalendarNotificationTrigger else { return }
+//            print("通知IDは\(req.identifier),トリガー条件は、\(trigger),次の通知は\(catrigger.nextTriggerDate())")
+            print("通知IDは\(req.identifier),トリガーは\(trigger),内容は\(req.content)")
+        }
+    })
+    
 }

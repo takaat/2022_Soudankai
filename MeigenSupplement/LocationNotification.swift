@@ -14,11 +14,13 @@ import CoreLocation
 struct LocationNotification {
     
     @Binding var setword: String
+    @Binding var repeatLocation: Bool
 //    let locationManager = CLLocationManager()
     
-        init(setword: Binding<String>) {
-            self._setword = setword
-        }
+    init(setword: Binding<String>,repeatLocation: Binding<Bool>) {
+        self._setword = setword
+        self._repeatLocation = repeatLocation
+    }
     func basedOnLocationNotification(){
 //        locationManager.requestWhenInUseAuthorization()
 //        locationManager.delegate = self
@@ -47,9 +49,9 @@ struct LocationNotification {
             let categories = UNNotificationCategory(identifier: "action", actions: [open,cancel], intentIdentifiers: [])
             center.setNotificationCategories([categories])
             // ローカル通知リクエストを作成
-            let trigger = UNLocationNotificationTrigger(region: region, repeats: false)
+            let trigger = UNLocationNotificationTrigger(region: region, repeats: repeatLocation)
             // ユニークなIDを作る
-            let identifier = NSUUID().uuidString
+            let identifier = UUID().description
             let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
             // ローカル通知リクエストを登録
             center.add(request){ (error : Error?) in
