@@ -44,6 +44,7 @@ struct LocationView: View {
                 //                        .padding()
                 VStack {
                     SearchBar(setword: $setword, editting: $editting)
+                        .frame(width: 355)
                         .cornerRadius(8)
                         .padding([.top, .leading, .trailing])
                         .shadow(color: editting ? .blue : .clear, radius: 3)

@@ -66,7 +66,9 @@ struct ContentView: View {
                 
                 NavigationLink("位置情報による通知へ", destination: LocationView()).padding()
                 
-                Button("通知一覧の取得", action: {getPendingNotification()})
+                Button("通知一覧の取得", action: {getPendingNotification()}).padding()
+                
+                NavigationLink("通知一覧の表示", destination: NotificationListView())
                 
 //                TextField("input",text: $inputword,onCommit: {setword = inputword})
 //                    .padding()
