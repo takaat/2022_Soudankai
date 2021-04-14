@@ -12,15 +12,21 @@ struct NotificationListView: View {
     @State private var pendingNotification = PendingNotification()
     @State private var notificationRequests: [UNNotificationRequest] = []
     @State private var selectionValue: String? = ""
+    @State private var notifications = [Notification]()
+    @State private var userDefaultOperationNotification = UserDefaultOperationNotification()
+    
     
     var body: some View {
         NavigationView{
             VStack{
                 List(selection: $selectionValue){
-                    ForEach(notificationRequests,id:\.identifier){ pendingUNNotificationRequest in
+                    ForEach(notificationRequests,id:\.identifier){ pendingRequest in
+                        
+                       
                         VStack{
-                            Text(pendingUNNotificationRequest.identifier)
-                            Text(pendingUNNotificationRequest.content.body)
+                            Text(pendingRequest.identifier)
+                            Text(pendingRequest.content.body)
+                            
                         }
                     }
                     .onMove(perform: rowReplace )
@@ -28,12 +34,13 @@ struct NotificationListView: View {
                 }
                 .environment(\.editMode, .constant(.active))
                 
-                Button("全消去", action: {UNUserNotificationCenter.current().removeAllPendingNotificationRequests()})
+                Button("全消去", action:  {UNUserNotificationCenter.current().removeAllPendingNotificationRequests()})//全消去の機能は、動作する
             }
             
         }
         .onAppear{
             notificationRequests = pendingNotification.getPendingNotification()
+            notifications = userDefaultOperationNotification.loadUserDefault()
         }
         .toolbar { EditButton() }
     }
@@ -47,6 +54,16 @@ struct NotificationListView: View {
     func rowRemove(offsets: IndexSet) {
         notificationRequests.remove(atOffsets: offsets) //通知を削除するメソッドに変更するか。
         
+    }
+    
+    //これは構造体かクラスにする。関数ではViewに入れることができない。
+    func getnotification(request:UNNotificationRequest,notifications: [Notification]) {
+        
+        for notification in notifications{
+            if notification.id == request.identifier {
+                //ここの処理をどうするか。
+            }
+        }
     }
 }
 
@@ -71,3 +88,33 @@ class PendingNotification/*: Identifiable*/ {
         
     }
 }
+
+struct Notification: Identifiable,Codable,Hashable {
+    var id = ""
+    
+    var repeatTime = 0
+    var dateComponent = DateComponents()
+    
+    var repeatLocation = false
+    var setword = ""
+}
+
+struct UserDefaultOperationNotification {
+    
+    let encoder = JSONEncoder()
+    let decoder = JSONDecoder()
+    let userDefault = UserDefaults.standard
+    let key = "notification_Key"
+    
+    func saveUserDefault(array:[Notification]){
+        guard let encodedValue = try? encoder.encode(array) else{ return }
+        userDefault.set(encodedValue, forKey: key)
+    }
+    
+    func loadUserDefault() -> [Notification] {
+        guard let savedValue = userDefault.data(forKey: key),
+              let value = try? decoder.decode([Notification].self, from: savedValue) else { return [Notification]() }
+        return value
+    }
+}
+

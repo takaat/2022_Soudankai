@@ -26,6 +26,9 @@ struct TimeNotification {     //通知に名言を載せるなら、クラスに
         //meigen.getMeigen()
         let center = UNUserNotificationCenter.current()
         let content = UNMutableNotificationContent()
+        var notification = Notification()
+        let userDefaultOperationNotification = UserDefaultOperationNotification()
+        var notifications = [Notification]()
 //        center.delegate = AppDelegate()
         content.sound = UNNotificationSound.default
         content.title = "本日の名言が配信されました。"
@@ -64,6 +67,14 @@ struct TimeNotification {     //通知に名言を載せるなら、クラスに
         center.add(request){ (error : Error?) in
             if let error = error {
                 print(error.localizedDescription)
+            }
+            else{
+                //構造体に追加し、その構造体を配列に保存。その配列をuserdefaaultに保存の処理を書くか。
+                notification.id = identifier
+                notification.repeatTime = repeatTime
+                notification.dateComponent = component
+                notifications.append(notification)
+                userDefaultOperationNotification.saveUserDefault(array: notifications)
             }
         }
     }

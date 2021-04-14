@@ -37,6 +37,9 @@ struct LocationNotification {
 //            func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
 //                return
 //            }
+            var notification = Notification()
+            let userDefaultOperationNotification = UserDefaultOperationNotification()
+            var notifications = [Notification]()
             let center = UNUserNotificationCenter.current()
             let content = UNMutableNotificationContent()
             content.sound = UNNotificationSound.default
@@ -57,6 +60,14 @@ struct LocationNotification {
             center.add(request){ (error : Error?) in
                 if let error = error {
                     print(error.localizedDescription)
+                }
+                else{
+                    //構造体に追加し、その構造体を配列に保存。その配列をuserdefaaultに保存の処理を書くか。
+                    notification.id = identifier
+                    notification.repeatLocation = repeatLocation
+                    notification.setword = setword
+                    notifications.append(notification)
+                    userDefaultOperationNotification.saveUserDefault(array: notifications)
                 }
             }
         })
