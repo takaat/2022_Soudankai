@@ -60,7 +60,7 @@ struct TimeNotification {     //通知に名言を載せるなら、クラスに
         
         let trigger = UNCalendarNotificationTrigger(dateMatching: component, repeats: repeats)
         // ユニークなIDを作る
-        let identifier = UUID().description
+        let identifier = "T" + UUID().description
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
         
         // ローカル通知リクエストを登録
@@ -70,6 +70,7 @@ struct TimeNotification {     //通知に名言を載せるなら、クラスに
             }
             else{
                 //構造体に追加し、その構造体を配列に保存。その配列をuserdefaaultに保存の処理を書くか。
+                notifications = userDefaultOperationNotification.loadUserDefault()
                 notification.id = identifier
                 notification.repeatTime = repeatTime
                 notification.dateComponent = component

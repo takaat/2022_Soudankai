@@ -54,7 +54,7 @@ struct LocationNotification {
             // ローカル通知リクエストを作成
             let trigger = UNLocationNotificationTrigger(region: region, repeats: repeatLocation)
             // ユニークなIDを作る
-            let identifier = UUID().description
+            let identifier = "L" + UUID().description
             let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
             // ローカル通知リクエストを登録
             center.add(request){ (error : Error?) in
@@ -63,6 +63,7 @@ struct LocationNotification {
                 }
                 else{
                     //構造体に追加し、その構造体を配列に保存。その配列をuserdefaaultに保存の処理を書くか。
+                    notifications = userDefaultOperationNotification.loadUserDefault()
                     notification.id = identifier
                     notification.repeatLocation = repeatLocation
                     notification.setword = setword
