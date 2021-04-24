@@ -12,12 +12,8 @@ struct NotificationListView: View {
     
     @State private var pendingNotification = PendingNotification()
     @State private var notificationRequests: [UNNotificationRequest] = []
-    @State private var selectionValue: String? = ""
     @State private var notifications = [Notification]()
     @State private var userDefaultOperationNotification = UserDefaultOperationNotification()
-    @State var weekday = ""
-//    let dateComponent = DateComponents(calendar: Calendar.current)
-    let returnString = ReturnString()
     
     var body: some View {
         NavigationView{
@@ -29,99 +25,64 @@ struct NotificationListView: View {
                         if request.identifier.hasPrefix("T") {
                             
                             let trigger = request.trigger as? UNCalendarNotificationTrigger
-                           
-                            if let dateComponents =  trigger?.dateComponents{
-                                //どこかでdateComponentsにCalendarを設定する必要がある。
-//                                dateComponents.calendar = Calendar.current
+                            let dateComponents = trigger?.dateComponents
+                            
+                            if let dateComponents = dateComponents{
+                                let date = Calendar.current.date(from: dateComponents)
                                 
                                 if dateComponents.month != nil{
                                     
-                                    VStack{
-                                        Text("\(dateComponents.year ?? 0)年\(dateComponents.month ?? 0)月\(dateComponents.day ?? 0)日\(dateComponents.hour ?? 0)時\(dateComponents.minute ?? 0)分")
-                                        //                                        Text(dateComponent.date ?? Date(), style: .date)
-                                        //                                        Text(dateComponent.date ?? Date(), style: .time)
+                                    HStack{
+                                        Text(date ?? Date(), style: .date)
+                                        Text(date ?? Date(), style: .time)
                                     }
-                                    
                                 }
-                                //                                else if dateComponents.weekday != nil{
-                                //                                    switch dateComponents.weekday {
-                                //                                    case 1: weekday = "日曜日"
-                                //                                    case 2: weekday = "月曜日"
-                                //                                    case 3: weekday = "火曜日"
-                                //                                    case 4: weekday = "水曜日"
-                                //                                    case 5: weekday = "木曜日"
-                                //                                    case 6: weekday = "金曜日"
-                                //                                    case 7: weekday = "土曜日"
-                                //                                    default: break
-                                //                                    }
-                                //                                    HStack{
-                                //                                        Text("毎週\(weekday)")
-                                //                                        Text(dateComponents.date ?? Date(), style: .time)
-                                //                                    }
-                                //                                }
+                                else if dateComponents.weekday != nil{//ここを関数として切り分ける。
+                                    let stringWeekday = everyWeek(dateComponents)
+                                    
+                                    HStack{
+                                        Text("毎週")
+                                        Text("\(stringWeekday)")
+                                        Text(date ?? Date(), style: .time)
+                                    }
+//                                    print(trigger.nexttriggerDate())
+                                }
                                 else{
+                                    
                                     HStack{
                                         Text("毎日")
-                                        Text(dateComponents.date ?? Date(), style: .time)
+                                        Text(date ?? Date(), style: .time)
                                     }
                                 }
-                                
                             }
                         }
-                        else{
-                            Text("nextTriggerアンラップ失敗")
-                        }
-                    }.onMove(perform: rowReplace )
+                    }
+                    .onMove(perform: rowReplace )
                     .onDelete(perform: rowRemove )
                 }
-                
                 Text("場所指定の通知")
                 
-                //                        if /*let day = trigger?.dateComponents.day,*/
-                //                           let hour = trigger?.dateComponents.hour,
-                //                           let min = trigger?.dateComponents.minute{
-                //                            Text("\(hour)時\(min)分です")
-                //                        }
-                //                        if let date = trigger?.dateComponents.date{
-                //                            HStack{
-                //                                Text(date, style: .date)
-                //                                Text(date, style: .time)
-                //                            }
-                //                        }
-                //                        else{
-                //                            Text("dateComponentsアンラップできません。")
-                //
-                //                        }
-                //                        Group{
-                
-                //                            let month = trigger!.dateComponents.month
-                //                        let date = trigger.dateComponents.hour
-                //                            Text(String(month!))
-                
-                //                        Text(date)
-                //                        }
-                //                        VStack{
-                //                            Text(notification.setword)
-                //                            Text(notification.dateComponent.description)
-                //                            Text(returnString.convertString(notification: notification))
-                //                        }
-                
+                List{
+                    ForEach(notificationRequests,id:\.self){ request in
+                        //ここに関数を入れる
+                        let (setword,repeatLocation) = locationNotification(request)
+                        
+                        Text(setword)
+                        Text(repeatLocation ? "繰り返し　あり":"繰り返し　なし")
+                    }
+                    .onMove(perform:  ) //処理を入れること
+                    .onDelete(perform:  ) //処理を入れること
+                }
+                Button("全消去", action:  {UNUserNotificationCenter.current().removeAllPendingNotificationRequests()}).padding()//全消去の機能は、動作する
             }
-            
+//            .environment(\.editMode, .constant(.active))
+            .onAppear{
+                notificationRequests = pendingNotification.getPendingNotification()
+                notifications = userDefaultOperationNotification.loadUserDefault()
+            }
         }
-        .environment(\.editMode, .constant(.active))
-        .onAppear{
-            notificationRequests = pendingNotification.getPendingNotification()
-            notifications = userDefaultOperationNotification.loadUserDefault()
-        }
-        Button("全消去", action:  {UNUserNotificationCenter.current().removeAllPendingNotificationRequests()})//全消去の機能は、動作する
-        
-        
     }
-    
     //        .toolbar { EditButton() }
-    
-    
     // 行入れ替え処理
     func rowReplace(_ from: IndexSet, _ to: Int) {
         notificationRequests.move(fromOffsets: from, toOffset: to)
@@ -129,10 +90,32 @@ struct NotificationListView: View {
     }
     //行削除をする関数
     func rowRemove(offsets: IndexSet) {
-        notificationRequests.remove(atOffsets: offsets) //通知を削除するメソッドに変更するか。
-        
+        let identifier = notificationRequests[offsets[offsets.startIndex]].identifier
+        notificationRequests.remove(atOffsets: offsets)
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
     }
     
+    func everyWeek(_ dateComponents: DateComponents) -> String{
+        var stringWeekday = ""
+        switch dateComponents.weekday {
+        case 1: stringWeekday = "日曜日"
+        case 2: stringWeekday = "月曜日"
+        case 3: stringWeekday = "火曜日"
+        case 4: stringWeekday = "水曜日"
+        case 5: stringWeekday = "木曜日"
+        case 6: stringWeekday = "金曜日"
+        case 7: stringWeekday = "土曜日"
+        default:break
+        }
+        return stringWeekday
+    }
+    
+    
+    func locationNotification(_ request: UNNotificationRequest) -> (String,Bool){
+        if request.identifier.hasPrefix("L") && request.identifier == Notification().id{
+            return (Notification().setword,Notification().repeatLocation)
+        }
+    }
     //これは構造体かクラスにする。関数ではViewに入れることができない。
     //    func getnotification(_ request:UNNotificationRequest)  {
     //        guard let trigger = request.trigger as? UNCalendarNotificationTrigger,
@@ -220,3 +203,58 @@ struct UserDefaultOperationNotification {
     }
 }
 
+
+//                        if /*let day = trigger?.dateComponents.day,*/
+//                           let hour = trigger?.dateComponents.hour,
+//                           let min = trigger?.dateComponents.minute{
+//                            Text("\(hour)時\(min)分です")
+//                        }
+//                        if let date = trigger?.dateComponents.date{
+//                            HStack{
+//                                Text(date, style: .date)
+//                                Text(date, style: .time)
+//                            }
+//                        }
+//                        else{
+//                            Text("dateComponentsアンラップできません。")
+//
+//                        }
+//                        Group{
+
+//                            let month = trigger!.dateComponents.month
+//                        let date = trigger.dateComponents.hour
+//                            Text(String(month!))
+
+//                        Text(date)
+//                        }
+//                        VStack{
+//                            Text(notification.setword)
+//                            Text(notification.dateComponent.description)
+//                            Text(returnString.convertString(notification: notification))
+//                        }
+//どこかでdateComponentsにCalendarを設定する必要がある。
+//                                dateComponents.calendar = Calendar.current
+
+//                                if dateComponents.month != nil{
+//                                else if dateComponents.weekday != nil{
+//                                    switch dateComponents.weekday {
+//                                    case 1: weekday = "日曜日"
+//                                    case 2: weekday = "月曜日"
+//                                    case 3: weekday = "火曜日"
+//                                    case 4: weekday = "水曜日"
+//                                    case 5: weekday = "木曜日"
+//                                    case 6: weekday = "金曜日"
+//                                    case 7: weekday = "土曜日"
+//                                    default: break
+//                                    }
+//                                    HStack{
+//                                        Text("毎週\(weekday)")
+//                                        Text(dateComponents.date ?? Date(), style: .time)
+//                                    }
+//                                }
+//                            else{
+//                                HStack{
+//                                    Text("毎日")
+//                                    Text(dateComponents.date ?? Date(), style: .time)
+//                                }
+//                            }
