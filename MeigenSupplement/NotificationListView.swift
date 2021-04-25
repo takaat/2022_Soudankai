@@ -10,79 +10,86 @@ import Foundation
 
 struct NotificationListView: View {
     
-    @State private var pendingNotification = PendingNotification()
-    @State private var notificationRequests: [UNNotificationRequest] = []
-    @State private var notifications = [Notification]()
-    @State private var userDefaultOperationNotification = UserDefaultOperationNotification()
-    
     var body: some View {
         NavigationView{
+            
             VStack{
-                Text("日時指定の通知")
-                List{
-                    ForEach(notificationRequests,id:\.self){ request in
+                TimeDisplayView()
+                    .padding(.vertical)
+                LocationDisplayView()
+                    .padding(.vertical)
+
+                Button("全消去", action:  {UNUserNotificationCenter.current().removeAllPendingNotificationRequests()}).padding()//全消去の機能は、動作する
+            }
+            .toolbar { EditButton() }
+        }
+    }
+}
+
+struct NotificationListView_Previews: PreviewProvider {
+    static var previews: some View {
+        NotificationListView()
+    }
+}
+
+
+
+
+
+struct TimeDisplayView: View{
+    
+    @State private var pendingNotification = PendingNotification()
+    @State private var notificationRequests: [UNNotificationRequest] = []
+    
+    var body: some View{
+        
+        VStack{
+            Text("日時指定の通知")
+            List{
+                ForEach(notificationRequests,id:\.self){ request in
+                    
+                    if request.identifier.hasPrefix("T") {
                         
-                        if request.identifier.hasPrefix("T") {
+                        let trigger = request.trigger as? UNCalendarNotificationTrigger
+                        let dateComponents = trigger?.dateComponents
+                        
+                        if let dateComponents = dateComponents{
+                            let date = Calendar.current.date(from: dateComponents)
                             
-                            let trigger = request.trigger as? UNCalendarNotificationTrigger
-                            let dateComponents = trigger?.dateComponents
-                            
-                            if let dateComponents = dateComponents{
-                                let date = Calendar.current.date(from: dateComponents)
+                            if dateComponents.month != nil{
                                 
-                                if dateComponents.month != nil{
-                                    
-                                    HStack{
-                                        Text(date ?? Date(), style: .date)
-                                        Text(date ?? Date(), style: .time)
-                                    }
+                                HStack{
+                                    Text(date ?? Date(), style: .date)
+                                    Text(date ?? Date(), style: .time)
                                 }
-                                else if dateComponents.weekday != nil{//ここを関数として切り分ける。
-                                    let stringWeekday = everyWeek(dateComponents)
-                                    
-                                    HStack{
-                                        Text("毎週")
-                                        Text("\(stringWeekday)")
-                                        Text(date ?? Date(), style: .time)
-                                    }
-//                                    print(trigger.nexttriggerDate())
+                            }
+                            else if dateComponents.weekday != nil{//ここを関数として切り分ける。
+                                let stringWeekday = everyWeek(dateComponents)
+                                
+                                HStack{
+                                    Text("毎週")
+                                    Text("\(stringWeekday)")
+                                    Text(date ?? Date(), style: .time)
                                 }
-                                else{
-                                    
-                                    HStack{
-                                        Text("毎日")
-                                        Text(date ?? Date(), style: .time)
-                                    }
+                            }
+                            else{
+                                
+                                HStack{
+                                    Text("毎日")
+                                    Text(date ?? Date(), style: .time)
                                 }
                             }
                         }
                     }
-                    .onMove(perform: rowReplace )
-                    .onDelete(perform: rowRemove )
                 }
-                Text("場所指定の通知")
-                
-                List{
-                    ForEach(notificationRequests,id:\.self){ request in
-                        //ここに関数を入れる
-                        let (setword,repeatLocation) = locationNotification(request)
-                        
-                        Text(setword)
-                        Text(repeatLocation ? "繰り返し　あり":"繰り返し　なし")
-                    }
-                    .onMove(perform:  ) //処理を入れること
-                    .onDelete(perform:  ) //処理を入れること
-                }
-                Button("全消去", action:  {UNUserNotificationCenter.current().removeAllPendingNotificationRequests()}).padding()//全消去の機能は、動作する
-            }
-//            .environment(\.editMode, .constant(.active))
-            .onAppear{
-                notificationRequests = pendingNotification.getPendingNotification()
-                notifications = userDefaultOperationNotification.loadUserDefault()
+                .onMove(perform: rowReplace )
+                .onDelete(perform: rowRemove )
             }
         }
+        .onAppear{
+            notificationRequests = pendingNotification.getPendingNotification()
+        }
     }
-    //        .toolbar { EditButton() }
     // 行入れ替え処理
     func rowReplace(_ from: IndexSet, _ to: Int) {
         notificationRequests.move(fromOffsets: from, toOffset: to)
@@ -109,36 +116,77 @@ struct NotificationListView: View {
         }
         return stringWeekday
     }
+}
+
+
+
+
+struct LocationDisplayView: View {
     
+    @State private var pendingNotification = PendingNotification()
+    @State private var notificationRequests: [UNNotificationRequest] = []
+    @State private var notifications = [Notification]()
+    @State private var userDefaultOperationNotification = UserDefaultOperationNotification()
     
-    func locationNotification(_ request: UNNotificationRequest) -> (String,Bool){
-        if request.identifier.hasPrefix("L") && request.identifier == Notification().id{
-            return (Notification().setword,Notification().repeatLocation)
+    var body: some View{
+        
+        VStack{
+            Text("場所指定の通知")
+            
+            List{
+                ForEach(notificationRequests,id:\.self){ request in
+                    //ここに関数を入れる
+                    if request.identifier.hasPrefix("L") {
+                        let (setword,repeatLocation) = locationNotification(request)
+                        HStack{
+                            Text(setword)
+                            Divider()
+                            Text(repeatLocation ? "繰り返し あり":"繰り返し なし")
+                        }
+                    }
+                }
+                .onMove(perform: rowReplace )
+                .onDelete(perform: rowRemove)
+            }
+        }
+        .onAppear{
+            notificationRequests = pendingNotification.getPendingNotification()
+            notifications = userDefaultOperationNotification.loadUserDefault()
         }
     }
-    //これは構造体かクラスにする。関数ではViewに入れることができない。
-    //    func getnotification(_ request:UNNotificationRequest)  {
-    //        guard let trigger = request.trigger as? UNCalendarNotificationTrigger,
-    //              let date = trigger.dateComponents.date else{ return }
-    //        Text(date, style: .date)
     
-    //         Text("a")
-    //        for notification in notifications{
-    //            if notification.id == request.identifier {
-    //                //ここの処理をどうするか。
-    //            }
-    //        }
-}
-
-
-
-
-
-struct NotificationListView_Previews: PreviewProvider {
-    static var previews: some View {
-        NotificationListView()
+    // 行入れ替え処理
+    func rowReplace(_ from: IndexSet, _ to: Int) {
+        notificationRequests.move(fromOffsets: from, toOffset: to)
+        
+    }
+    //行削除をする関数
+    func rowRemove(offsets: IndexSet) {
+        let identifier = notificationRequests[offsets[offsets.startIndex]].identifier
+        notificationRequests.remove(atOffsets: offsets)
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
+        for notificaition in notifications{
+            if notificaition.id == identifier{
+                let index = notifications.firstIndex(of: notificaition)
+                notifications.remove(at: index ?? 0)
+                userDefaultOperationNotification.saveUserDefault(array: notifications)
+            }
+        }
+    }
+    
+    func locationNotification(_ request: UNNotificationRequest) -> (String,Bool){
+        
+        for notificaition in notifications{
+            if notificaition.id == request.identifier{
+                return (notificaition.setword,notificaition.repeatLocation)
+            }
+        }
+        return ("",false)
     }
 }
+
+
+
 
 struct ReturnString {
     
