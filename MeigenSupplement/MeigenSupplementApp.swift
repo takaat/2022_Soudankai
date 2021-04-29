@@ -21,7 +21,7 @@ struct MeigenSupplementApp: App {
 
 class AppDelegate: UIResponder,UIApplicationDelegate,UNUserNotificationCenterDelegate,ObservableObject{
     
-    @ObservedObject var meigen = Meigen()
+//    @ObservedObject var meigen = Meigen()
 //    var showMeigen: Bool = false
     
 //    init(showMeigen: Binding<Bool>) {

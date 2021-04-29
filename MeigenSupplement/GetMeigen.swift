@@ -17,23 +17,19 @@ class Meigen: NSObject,ObservableObject,XMLParserDelegate{
    @Published var auther = ""
    private var element = ""
     
-    func getMeigen(){
-        
-        guard let req_url = URL(string: "http://meigen.doodlenote.net/api?c=1") else{
-            return
-        }
-        
+    func getMeigen(callback: @escaping () -> Void){
+    
+        guard let req_url = URL(string: "http://meigen.doodlenote.net/api?c=1") else{ return }
         let req = URLRequest(url: req_url)
         let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
         let task = session.dataTask(with: req,completionHandler: {(data,response,error) in session.finishTasksAndInvalidate()
-            guard let data = data else{
-                return
-            }
+            guard let data = data else{ return }
 //            let str: String? = String(data: data, encoding: .utf8)
 //            print(str!)
             let parser = XMLParser(data: data)
             parser.delegate = self
             parser.parse()
+            callback()
         })
         task.resume()
     }

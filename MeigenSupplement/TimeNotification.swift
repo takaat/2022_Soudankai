@@ -9,9 +9,9 @@ import Foundation
 import UserNotifications
 import SwiftUI
 
-struct TimeNotification {     //通知に名言を載せるなら、クラスにしてNSOBJECTに準拠する必要がある。
+class TimeNotification {     //通知に名言を載せるなら、クラスにしてNSOBJECTに準拠する必要がある。
     
-   // @ObservedObject var meigen = Meigen()
+    let meigen = Meigen() //letでも良いかも
     @Binding var date: Date
     @Binding var repeatTime: Int
    
@@ -22,8 +22,11 @@ struct TimeNotification {     //通知に名言を載せるなら、クラスに
     }
     
     func basedOnTimeNotification(){//関数の中でインスタンス化しないとエラーになる。
+        meigen.getMeigen(callback: sendTimeNotification)
+    }
+    
+    func sendTimeNotification(){
         // ローカル通知のの内容
-        //meigen.getMeigen()
         let center = UNUserNotificationCenter.current()
         let content = UNMutableNotificationContent()
         var notification = Notification()
@@ -31,9 +34,9 @@ struct TimeNotification {     //通知に名言を載せるなら、クラスに
         var notifications = [Notification]()
 //        center.delegate = AppDelegate()
         content.sound = UNNotificationSound.default
-        content.title = "本日の名言が配信されました。"
-        content.subtitle = "日時に基づく通知です。"
-        content.body = "今日から明日へ"
+//        content.title = "本日の名言が配信されました。"
+        content.subtitle = meigen.auther
+        content.body = meigen.meigen
         content.categoryIdentifier = "action"
         let open = UNNotificationAction(identifier: "open", title: "Open", options: .foreground)
         let cancel = UNNotificationAction(identifier: "cancel", title: "Cancel", options: .destructive)
@@ -72,7 +75,7 @@ struct TimeNotification {     //通知に名言を載せるなら、クラスに
                 //構造体に追加し、その構造体を配列に保存。その配列をuserdefaaultに保存の処理を書くか。
                 notifications = userDefaultOperationNotification.loadUserDefault()
                 notification.id = identifier
-                notification.repeatTime = repeatTime
+                notification.repeatTime = self.repeatTime
                 notification.dateComponent = component
                 notifications.append(notification)
                 userDefaultOperationNotification.saveUserDefault(array: notifications)

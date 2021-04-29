@@ -11,10 +11,11 @@ import SwiftUI
 import CoreLocation
 
 
-struct LocationNotification {
+class LocationNotification {
     
     @Binding var setword: String
     @Binding var repeatLocation: Bool
+    let meigen = Meigen()
 //    let locationManager = CLLocationManager()
     
     init(setword: Binding<String>,repeatLocation: Binding<Bool>) {
@@ -22,15 +23,16 @@ struct LocationNotification {
         self._repeatLocation = repeatLocation
     }
     func basedOnLocationNotification(){
+        meigen.getMeigen(callback: sendLocationNotification)
+    }
 //        locationManager.requestWhenInUseAuthorization()
 //        locationManager.delegate = self
+    func sendLocationNotification(){
         let geocoder = CLGeocoder()
         
         geocoder.geocodeAddressString(setword, completionHandler: {(placemarks,error) in
             
-            guard let region = placemarks?.first?.region else{
-                return print("位置情報が取得できません")
-            }
+            guard let region = placemarks?.first?.region else{ return print("位置情報が取得できません") }
             region.notifyOnExit = false
             
 //            locationManager.delegate = self
@@ -43,16 +45,16 @@ struct LocationNotification {
             let center = UNUserNotificationCenter.current()
             let content = UNMutableNotificationContent()
             content.sound = UNNotificationSound.default
-            content.title = "本日の名言が配信されました。"
-            content.subtitle = "位置情報に基づく通知です。"
-            content.body = "今日から明日へ"
+//            content.title = "本日の名言が配信されました。"
+            content.subtitle = self.meigen.auther
+            content.body = self.meigen.meigen
             content.categoryIdentifier = "action"
             let open = UNNotificationAction(identifier: "open", title: "Open", options: .foreground)
             let cancel = UNNotificationAction(identifier: "cancel", title: "Cancel", options: .destructive)
             let categories = UNNotificationCategory(identifier: "action", actions: [open,cancel], intentIdentifiers: [])
             center.setNotificationCategories([categories])
             // ローカル通知リクエストを作成
-            let trigger = UNLocationNotificationTrigger(region: region, repeats: repeatLocation)
+            let trigger = UNLocationNotificationTrigger(region: region, repeats: self.repeatLocation)
             // ユニークなIDを作る
             let identifier = "L" + UUID().description
             let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
@@ -65,8 +67,8 @@ struct LocationNotification {
                     //構造体に追加し、その構造体を配列に保存。その配列をuserdefaaultに保存の処理を書くか。
                     notifications = userDefaultOperationNotification.loadUserDefault()
                     notification.id = identifier
-                    notification.repeatLocation = repeatLocation
-                    notification.setword = setword
+                    notification.repeatLocation = self.repeatLocation
+                    notification.setword = self.setword
                     notifications.append(notification)
                     userDefaultOperationNotification.saveUserDefault(array: notifications)
                 }

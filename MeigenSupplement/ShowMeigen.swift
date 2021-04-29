@@ -61,7 +61,8 @@ struct ShowMeigen: View{
             .frame(width: 300, height: 35, alignment: /*@START_MENU_TOKEN@*/.trailing/*@END_MENU_TOKEN@*/)
         }
         .onAppear{
-            meigen.getMeigen()
+            meigen.getMeigen(callback: {})
+            isFavorite = false
         }
     }
 }
