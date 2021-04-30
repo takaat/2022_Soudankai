@@ -9,6 +9,7 @@ import Foundation
 import UserNotifications
 import SwiftUI
 import CoreLocation
+import MapKit
 
 
 class LocationNotification {
@@ -16,7 +17,7 @@ class LocationNotification {
     @Binding var setword: String
     @Binding var repeatLocation: Bool
     let meigen = Meigen()
-//    let locationManager = CLLocationManager()
+    //    let locationManager = CLLocationManager()
     
     init(setword: Binding<String>,repeatLocation: Binding<Bool>) {
         self._setword = setword
@@ -25,27 +26,36 @@ class LocationNotification {
     func basedOnLocationNotification(){
         meigen.getMeigen(callback: sendLocationNotification)
     }
-//        locationManager.requestWhenInUseAuthorization()
-//        locationManager.delegate = self
+    //        locationManager.requestWhenInUseAuthorization()
+    //        locationManager.delegate = self
     func sendLocationNotification(){
-        let geocoder = CLGeocoder()
         
-        geocoder.geocodeAddressString(setword, completionHandler: {(placemarks,error) in
+        let searchRequest = MKLocalSearch.Request()
+        searchRequest.naturalLanguageQuery = setword
+        let search = MKLocalSearch(request: searchRequest)
+        
+        search.start{(response,error) in
             
-            guard let region = placemarks?.first?.region else{ return print("位置情報が取得できません") }
+            guard let target = response?.mapItems.first,
+                  let region = target.placemark.region else{ return print("位置情報が取得できません")}
+            //        let geocoder = CLGeocoder()
+            
+            //        geocoder.geocodeAddressString(setword, completionHandler: {(placemarks,error) in
+            
+            //            guard let region = placemarks?.first?.region else{ return print("位置情報が取得できません") }
             region.notifyOnExit = false
             
-//            locationManager.delegate = self
-//            func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
-//                return
-//            }
+            //            locationManager.delegate = self
+            //            func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+            //                return
+            //            }
             var notification = Notification()
             let userDefaultOperationNotification = UserDefaultOperationNotification()
             var notifications = [Notification]()
             let center = UNUserNotificationCenter.current()
             let content = UNMutableNotificationContent()
             content.sound = UNNotificationSound.default
-//            content.title = "本日の名言が配信されました。"
+            //            content.title = "本日の名言が配信されました。"
             content.subtitle = self.meigen.auther
             content.body = self.meigen.meigen
             content.categoryIdentifier = "action"
@@ -73,6 +83,6 @@ class LocationNotification {
                     userDefaultOperationNotification.saveUserDefault(array: notifications)
                 }
             }
-        })
+        }//serchstart or geocodeの終わり
     }
 }

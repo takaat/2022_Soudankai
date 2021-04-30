@@ -60,7 +60,6 @@ struct LocationView: View {
                             })
                             .disabled(setword.isEmpty)
 //                            .frame(width: 60, height: 36)
-////                            .background(Color(.systemBackground))
 //                            .cornerRadius(8)
                             .padding(.leading, 25.0)
                             Spacer()
@@ -111,10 +110,13 @@ struct MapView: UIViewRepresentable{
     }
 
     func updateUIView(_ uiView: MKMapView, context: Context) {
-        let geocoder = CLGeocoder()
         let pin = MKPointAnnotation()
-        geocoder.geocodeAddressString(setword, completionHandler: {(placemarks,error) in
-            guard let location = placemarks?.first?.location else{
+        let searchRequest = MKLocalSearch.Request()
+        searchRequest.naturalLanguageQuery = setword
+        let search = MKLocalSearch(request: searchRequest)
+        search.start{(response,error) in
+            guard let target = response?.mapItems.first,
+                  let location = target.placemark.location else{
                 let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
                 let region = MKCoordinateRegion(center: uiView.userLocation.coordinate, span: span)
                 return uiView.setRegion(region, animated: true)
@@ -123,8 +125,24 @@ struct MapView: UIViewRepresentable{
             pin.coordinate = targetlocation
             uiView.region = MKCoordinateRegion(center: targetlocation, latitudinalMeters: 500, longitudinalMeters: 500)
             uiView.addAnnotation(pin)
-        })
+        }
     }
+    
+//    func updateUIView(_ uiView: MKMapView, context: Context) {
+//        let geocoder = CLGeocoder()
+//        let pin = MKPointAnnotation()
+//        geocoder.geocodeAddressString(setword, completionHandler: {(placemarks,error) in
+//            guard let location = placemarks?.first?.location else{
+//                let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+//                let region = MKCoordinateRegion(center: uiView.userLocation.coordinate, span: span)
+//                return uiView.setRegion(region, animated: true)
+//            }
+//            let targetlocation = location.coordinate
+//            pin.coordinate = targetlocation
+//            uiView.region = MKCoordinateRegion(center: targetlocation, latitudinalMeters: 500, longitudinalMeters: 500)
+//            uiView.addAnnotation(pin)
+//        })
+//    }
 }
 
 struct SearchBar: UIViewRepresentable {
