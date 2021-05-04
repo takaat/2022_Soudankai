@@ -15,7 +15,7 @@ struct ShowMeigen: View{
     @State var isFavorite = false
     @State private var myFavorites: [MyFavorite] = []
     @State private var myFavorite = MyFavorite()
-    @State private var userDefaultOperation = UserDefaultOperation()
+    let userDefaultOperation = UserDefaultOperation()
     
     var body: some View {
         

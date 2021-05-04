@@ -14,7 +14,7 @@ struct FavoriteView: View {
 //    @State private var arrayMyfavorite :[abc] =   [MyFavorite(meigen:"今日はとても天気がいいから、ユニクロに買い物にいくことになった。",auther:"上田　学"),MyFavorite(meigen:"ef",auther:"gh"),MyFavorite(meigen:"ij",auther:"kl"),MyFavorite(meigen:"介護",auther:"福祉")]
     //    @State var myFavorite: []
     @State private var myFavorites: [MyFavorite] = []
-    @State private var userDefaultOperation = UserDefaultOperation()
+    let userDefaultOperation = UserDefaultOperation()
     
     var body: some View {
         

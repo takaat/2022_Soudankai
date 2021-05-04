@@ -26,7 +26,7 @@ class TimeNotification {     //通知に名言を載せるなら、クラスに�
     }
     
     func sendTimeNotification(){
-        // ローカル通知のの内容
+        // ローカル通知の内容
         let center = UNUserNotificationCenter.current()
         let content = UNMutableNotificationContent()
         var notification = Notification()
@@ -39,8 +39,9 @@ class TimeNotification {     //通知に名言を載せるなら、クラスに�
         content.body = meigen.meigen
         content.categoryIdentifier = "action"
         let open = UNNotificationAction(identifier: "open", title: "Open", options: .foreground)
+        let addmyfavorite = UNNotificationAction(identifier: "addmyfavorite", title: "お気に入りに登録", options: [])
         let cancel = UNNotificationAction(identifier: "cancel", title: "Cancel", options: .destructive)
-        let categories = UNNotificationCategory(identifier: "action", actions: [open,cancel], intentIdentifiers: [])
+        let categories = UNNotificationCategory(identifier: "action", actions: [open,addmyfavorite,cancel], intentIdentifiers: [])
         center.setNotificationCategories([categories])
         
         //repeatTimeの値によってcomponentとtrigerを分ける。

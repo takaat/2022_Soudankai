@@ -28,6 +28,11 @@ class AppDelegate: UIResponder,UIApplicationDelegate,UNUserNotificationCenterDel
 //        self._showMeigen  = showMeigen
 //    }
     
+    private var myFavorites: [MyFavorite] = []
+    private var myFavorite = MyFavorite()
+    let userDefaultOperation = UserDefaultOperation()
+    
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         let center = UNUserNotificationCenter.current()
         center.delegate = self
@@ -45,9 +50,29 @@ class AppDelegate: UIResponder,UIApplicationDelegate,UNUserNotificationCenterDel
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         
-        if response.actionIdentifier == "open"{
-            
-            NotificationCenter.default.post(name: NSNotification.Name("ShowMeigen"), object: nil)
+//        if response.actionIdentifier == "open"{
+//
+//            NotificationCenter.default.post(name: NSNotification.Name("ShowMeigen"), object: nil)
+//        }
+        
+        if response.actionIdentifier == "addmyfavorite"{
+            myFavorites = userDefaultOperation.loadUserDefault()
+            myFavorite.favoriteMeigen = response.notification.request.content.body
+            myFavorite.favoriteAuther = response.notification.request.content.subtitle
+            myFavorites.append(myFavorite)
+            userDefaultOperation.saveUserDefault(array: myFavorites)
+        }
+        
+        let isrepeat = response.notification.request.trigger?.repeats
+        let identifier = response.notification.request.identifier
+        if isrepeat == true {
+            if identifier.hasPrefix("T") == true {
+//                TimeNotification(date: $date, repeatTime: $repeatTime).basedOnTimeNotification()
+            }
+            else{
+                
+            }
+            center.removePendingNotificationRequests(withIdentifiers: [identifier])
         }
         
         completionHandler()

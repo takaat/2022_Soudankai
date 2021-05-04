@@ -40,6 +40,9 @@ struct AddTimeNotification: View {
                 .pickerStyle(SegmentedPickerStyle())
                 .padding(/*@START_MENU_TOKEN@*/[.leading, .bottom, .trailing]/*@END_MENU_TOKEN@*/)
                 Spacer()
+                Button("通知済みの通知を表示"){
+                    UNUserNotificationCenter.current().getDeliveredNotifications(completionHandler: {noti in print(noti)})
+                }
                 
             }
             .navigationBarTitleDisplayMode(.inline)

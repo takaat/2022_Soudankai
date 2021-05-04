@@ -60,8 +60,9 @@ class LocationNotification {
             content.body = self.meigen.meigen
             content.categoryIdentifier = "action"
             let open = UNNotificationAction(identifier: "open", title: "Open", options: .foreground)
+            let addmyfavorite = UNNotificationAction(identifier: "addmyfavorite", title: "お気に入りに登録", options: .foreground)
             let cancel = UNNotificationAction(identifier: "cancel", title: "Cancel", options: .destructive)
-            let categories = UNNotificationCategory(identifier: "action", actions: [open,cancel], intentIdentifiers: [])
+            let categories = UNNotificationCategory(identifier: "action", actions: [open,addmyfavorite,cancel], intentIdentifiers: [])
             center.setNotificationCategories([categories])
             // ローカル通知リクエストを作成
             let trigger = UNLocationNotificationTrigger(region: region, repeats: self.repeatLocation)
