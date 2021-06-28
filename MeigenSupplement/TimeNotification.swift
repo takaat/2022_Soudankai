@@ -77,7 +77,7 @@ class TimeNotification {     //通知に名言を載せるなら、クラスに�
                 notifications = userDefaultOperationNotification.loadUserDefault()
                 notification.id = identifier
                 notification.repeatTime = self.repeatTime
-                notification.dateComponent = component
+                notification.date = self.date
                 notifications.append(notification)
                 userDefaultOperationNotification.saveUserDefault(array: notifications)
             }
