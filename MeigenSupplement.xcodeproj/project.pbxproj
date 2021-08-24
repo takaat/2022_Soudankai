@@ -19,6 +19,8 @@
 		BF10F636261997CF007F1C68 /* LocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF10F635261997CF007F1C68 /* LocationView.swift */; };
 		BF10F63926199809007F1C68 /* FavoriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF10F63826199809007F1C68 /* FavoriteView.swift */; };
 		BF159DB12620925B0016A281 /* AddTimeNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF159DB02620925B0016A281 /* AddTimeNotification.swift */; };
+		BF914A5C26D50349006B2396 /* file.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF914A5B26D50349006B2396 /* file.swift */; };
+		BF914A5E26D50A44006B2396 /* サンプルテキスト.txt in Resources */ = {isa = PBXBuildFile; fileRef = BF914A5D26D50A44006B2396 /* サンプルテキスト.txt */; };
 		BF93D80D2623366800320E50 /* NotificationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF93D80C2623366800320E50 /* NotificationListView.swift */; };
 /* End PBXBuildFile section */
 
@@ -37,6 +39,8 @@
 		BF10F635261997CF007F1C68 /* LocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationView.swift; sourceTree = "<group>"; };
 		BF10F63826199809007F1C68 /* FavoriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteView.swift; sourceTree = "<group>"; };
 		BF159DB02620925B0016A281 /* AddTimeNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTimeNotification.swift; sourceTree = "<group>"; };
+		BF914A5B26D50349006B2396 /* file.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = file.swift; sourceTree = "<group>"; };
+		BF914A5D26D50A44006B2396 /* サンプルテキスト.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = "サンプルテキスト.txt"; path = "../../../../../サンプルテキスト.txt"; sourceTree = "<group>"; };
 		BF93D80C2623366800320E50 /* NotificationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -82,7 +86,9 @@
 				BF10F62C261996F5007F1C68 /* GetMeigen.swift */,
 				BF10F62F26199742007F1C68 /* TimeNotification.swift */,
 				BF10F6322619979D007F1C68 /* LocationNotification.swift */,
+				BF914A5D26D50A44006B2396 /* サンプルテキスト.txt */,
 				BF10F61926199412007F1C68 /* Assets.xcassets */,
+				BF914A5B26D50349006B2396 /* file.swift */,
 				BF10F61E26199412007F1C68 /* Info.plist */,
 				BF10F61B26199412007F1C68 /* Preview Content */,
 			);
@@ -163,6 +169,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BF10F61D26199412007F1C68 /* Preview Assets.xcassets in Resources */,
+				BF914A5E26D50A44006B2396 /* サンプルテキスト.txt in Resources */,
 				BF10F61A26199412007F1C68 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -182,6 +189,7 @@
 				BF10F6162619940D007F1C68 /* MeigenSupplementApp.swift in Sources */,
 				BF10F636261997CF007F1C68 /* LocationView.swift in Sources */,
 				BF159DB12620925B0016A281 /* AddTimeNotification.swift in Sources */,
+				BF914A5C26D50349006B2396 /* file.swift in Sources */,
 				BF10F62D261996F5007F1C68 /* GetMeigen.swift in Sources */,
 				BF10F63026199742007F1C68 /* TimeNotification.swift in Sources */,
 			);

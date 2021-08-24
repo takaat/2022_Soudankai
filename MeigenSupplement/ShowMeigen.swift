@@ -19,7 +19,7 @@ struct ShowMeigen: View{
     
     var body: some View {
         
-        VStack {
+        VStack{
             Text(meigen.meigen)
                 .frame(alignment: .leading)
                 .fixedSize(horizontal: false, vertical: true)

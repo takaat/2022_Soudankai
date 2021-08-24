@@ -21,19 +21,26 @@ struct FavoriteView: View {
         NavigationView{
             List{
                 ForEach(myFavorites,id:\.self){ favorite in
-                    VStack(alignment: .leading, spacing: 3){
+                    VStack(alignment: .trailing, spacing: 3){
                         Text(favorite.favoriteMeigen)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .padding(.bottom)
+                            .fixedSize(horizontal: false, vertical: false)
+//                            .padding(.bottom)
                         Text(favorite.favoriteAuther)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .font(.body)
+//                            .foregroundColor(/*@START_MENU_TOKEN@*/.black/*@END_MENU_TOKEN@*/)
+                            .fixedSize(horizontal: false, vertical: false)
+//                            .font(.body)
                     }
+                    .padding(24)
+                    .overlay(RoundedRectangle(cornerRadius: 20)
+                                .stroke(Color.gray,lineWidth: 1))
+                    .frame(minWidth:140,minHeight:180)
+
                 }
                 .onMove(perform: rowReplace)
                 .onDelete(perform: rowRemove)
             }
             .navigationBarItems(trailing: EditButton())
+            
             
         }
         .onAppear{
@@ -56,7 +63,10 @@ struct FavoriteView: View {
 struct FavoriteView_Previews: PreviewProvider {
     //@State static var arrayMyfavorite = [MyFavorite]()
     static var previews: some View {
-        FavoriteView()
+        Group {
+            FavoriteView()
+            FavoriteView()
+        }
     }
 }
 

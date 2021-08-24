@@ -28,9 +28,7 @@ class AppDelegate: UIResponder,UIApplicationDelegate,UNUserNotificationCenterDel
 //        self._showMeigen  = showMeigen
 //    }
     
-    private var myFavorites: [MyFavorite] = []
-    private var myFavorite = MyFavorite()
-    let userDefaultOperation = UserDefaultOperation()
+    
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
@@ -55,25 +53,43 @@ class AppDelegate: UIResponder,UIApplicationDelegate,UNUserNotificationCenterDel
 //            NotificationCenter.default.post(name: NSNotification.Name("ShowMeigen"), object: nil)
 //        }
         
-        if response.actionIdentifier == "addmyfavorite"{
+        var myFavorites: [MyFavorite] = []
+        var myFavorite = MyFavorite()
+        let userDefaultOperation = UserDefaultOperation()
+        
+        let userDefaultOperationNotification =  UserDefaultOperationNotification()
+        var notifications = [Notification]()
+        let identifier = response.notification.request.identifier
+        
+//        if response.actionIdentifier == "addmyfavorite"{
             myFavorites = userDefaultOperation.loadUserDefault()
             myFavorite.favoriteMeigen = response.notification.request.content.body
             myFavorite.favoriteAuther = response.notification.request.content.subtitle
             myFavorites.append(myFavorite)
             userDefaultOperation.saveUserDefault(array: myFavorites)
+//        }
+        
+        notifications = userDefaultOperationNotification.loadUserDefault()
+        
+        for notification in notifications{
+            if notification.id == identifier{
+                let index = notifications.firstIndex(of: notification)
+                notifications.remove(at: index ?? 0)
+                userDefaultOperationNotification.saveUserDefault(array: notifications)
+            }
         }
         
-        let isrepeat = response.notification.request.trigger?.repeats
-        let identifier = response.notification.request.identifier
-        if isrepeat == true {
-            if identifier.hasPrefix("T") == true {
-//                TimeNotification(date: $date, repeatTime: $repeatTime).basedOnTimeNotification()
-            }
-            else{
-                
-            }
-            center.removePendingNotificationRequests(withIdentifiers: [identifier])
-        }
+//        let isrepeat = response.notification.request.trigger?.repeats
+        
+//        if isrepeat == true {
+//            if identifier.hasPrefix("T") == true {
+////                TimeNotification(date: $date, repeatTime: $repeatTime).basedOnTimeNotification()
+//            }
+//            else{
+//
+//            }
+//            center.removePendingNotificationRequests(withIdentifiers: [identifier])
+//        }
         
         completionHandler()
         

@@ -64,7 +64,7 @@ struct ContentView: View {
         .onAppear{
             
             NotificationCenter.default.addObserver(forName: NSNotification.Name("ShowMeigen"), object: nil, queue: .main, using: {(_) in self.show = true })
-            
+            smple()
         }
     }
 }
