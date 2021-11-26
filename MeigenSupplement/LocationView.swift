@@ -50,20 +50,20 @@ struct LocationView: View {
                         .shadow(color: editting ? .blue : .clear, radius: 3)
                     
                     
-//                    .background(Color(.systemBackground))
-//                    .cornerRadius(8)
+                    //                    .background(Color(.systemBackground))
+                    //                    .cornerRadius(8)
                     Group {
                         HStack{
                             Button("登録", action: {
                                 //ここに通知を設定すること})
                                 LocationNotification(setword: $setword,repeatLocation: $repeatLocation).basedOnLocationNotification()
                             })
-                            .disabled(setword.isEmpty)
-//                            .frame(width: 60, height: 36)
-//                            .cornerRadius(8)
-                            .padding(.leading, 25.0)
+                                .disabled(setword.isEmpty)
+                            //                            .frame(width: 60, height: 36)
+                            //                            .cornerRadius(8)
+                                .padding(.leading, 25.0)
                             Spacer()
-                        
+                            
                             
                             Image(systemName: "repeat")
                             Text("繰り返し")
@@ -74,7 +74,7 @@ struct LocationView: View {
                         }
                     }
                     .frame(width: 355, height:50 )
-//                    .padding()
+                    //                    .padding()
                     .background(Color(.systemBackground))
                     .cornerRadius(8)
                     
@@ -108,7 +108,7 @@ struct MapView: UIViewRepresentable{
         mapView.setUserTrackingMode(.follow, animated: true)
         return mapView
     }
-
+    
     func updateUIView(_ uiView: MKMapView, context: Context) {
         let pin = MKPointAnnotation()
         let searchRequest = MKLocalSearch.Request()
@@ -117,32 +117,45 @@ struct MapView: UIViewRepresentable{
         search.start{(response,error) in
             guard let target = response?.mapItems.first,
                   let location = target.placemark.location else{
-                let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
-                let region = MKCoordinateRegion(center: uiView.userLocation.coordinate, span: span)
-                return uiView.setRegion(region, animated: true)
-            }
+                      let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+                      let region = MKCoordinateRegion(center: uiView.userLocation.coordinate, span: span)
+                      return uiView.setRegion(region, animated: true)
+                  }
             let targetlocation = location.coordinate
             pin.coordinate = targetlocation
             uiView.region = MKCoordinateRegion(center: targetlocation, latitudinalMeters: 500, longitudinalMeters: 500)
             uiView.addAnnotation(pin)
         }
+        
+//        func pressMap(_ sender: UILongPressGestureRecognizer) {
+//
+//            let location:CGPoint = sender.location(in: uiView)
+//            if (sender.state == UIGestureRecognizer.State.ended){
+//                //タップした位置を緯度、経度の座標に変換する。
+//                let mapPoint:CLLocationCoordinate2D = uiView.convert(location,toCoordinateFrom: uiView)
+//                //ピンを作成してマップビューに登録する。
+//                pin.coordinate = CLLocationCoordinate2DMake(mapPoint.latitude, mapPoint.longitude)
+//                uiView.addAnnotation(pin)
+//            }
+//        }
     }
     
-//    func updateUIView(_ uiView: MKMapView, context: Context) {
-//        let geocoder = CLGeocoder()
-//        let pin = MKPointAnnotation()
-//        geocoder.geocodeAddressString(setword, completionHandler: {(placemarks,error) in
-//            guard let location = placemarks?.first?.location else{
-//                let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
-//                let region = MKCoordinateRegion(center: uiView.userLocation.coordinate, span: span)
-//                return uiView.setRegion(region, animated: true)
-//            }
-//            let targetlocation = location.coordinate
-//            pin.coordinate = targetlocation
-//            uiView.region = MKCoordinateRegion(center: targetlocation, latitudinalMeters: 500, longitudinalMeters: 500)
-//            uiView.addAnnotation(pin)
-//        })
-//    }
+    
+    //    func updateUIView(_ uiView: MKMapView, context: Context) {
+    //        let geocoder = CLGeocoder()
+    //        let pin = MKPointAnnotation()
+    //        geocoder.geocodeAddressString(setword, completionHandler: {(placemarks,error) in
+    //            guard let location = placemarks?.first?.location else{
+    //                let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+    //                let region = MKCoordinateRegion(center: uiView.userLocation.coordinate, span: span)
+    //                return uiView.setRegion(region, animated: true)
+    //            }
+    //            let targetlocation = location.coordinate
+    //            pin.coordinate = targetlocation
+    //            uiView.region = MKCoordinateRegion(center: targetlocation, latitudinalMeters: 500, longitudinalMeters: 500)
+    //            uiView.addAnnotation(pin)
+    //        })
+    //    }
 }
 
 struct SearchBar: UIViewRepresentable {
@@ -180,7 +193,7 @@ struct SearchBar: UIViewRepresentable {
         func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
             parent.editting = true
         }
-
+        
         func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
             guard let setword = searchBar.text else{
                 return searchBar.text = ""
