@@ -13,12 +13,10 @@ class TimeNotification {     //通知に名言を載せるなら、クラスに�
     
     let meigen = Meigen() //letでも良いかも
     @Binding var date: Date
-    @Binding var repeatTime: Int
    
     
-    init(date: Binding<Date>,repeatTime: Binding<Int>) {
+    init(date: Binding<Date>) {
         self._date = date
-        self._repeatTime = repeatTime
     }
     
     func basedOnTimeNotification(){//関数の中でインスタンス化しないとエラーになる。
@@ -44,25 +42,9 @@ class TimeNotification {     //通知に名言を載せるなら、クラスに�
         let categories = UNNotificationCategory(identifier: "action", actions: [open,addmyfavorite,cancel], intentIdentifiers: [])
         center.setNotificationCategories([categories])
         
-        //repeatTimeの値によってcomponentとtrigerを分ける。
         var component = DateComponents()
-        var repeats: Bool = false
-        
-        switch repeatTime {
-        case 0: //繰り返しなし
-            component = Calendar.current.dateComponents([.year, .month, .day, .weekday,.hour, .minute], from: date)
-            repeats = false
-        case 1: //毎日
-            component = Calendar.current.dateComponents([.hour, .minute], from: date)
-            repeats = true
-        case 2: //毎週
-            component = Calendar.current.dateComponents([.weekday,.hour, .minute], from: date)
-            repeats = true
-        default:
-            break
-        }
-        
-        let trigger = UNCalendarNotificationTrigger(dateMatching: component, repeats: repeats)
+       
+        let trigger = UNCalendarNotificationTrigger(dateMatching: component, repeats: false)
         // ユニークなIDを作る
         let identifier = "T" + UUID().description
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
@@ -76,7 +58,6 @@ class TimeNotification {     //通知に名言を載せるなら、クラスに�
                 //構造体に追加し、その構造体を配列に保存。その配列をuserdefaaultに保存の処理を書くか。
                 notifications = userDefaultOperationNotification.loadUserDefault()
                 notification.id = identifier
-                notification.repeatTime = self.repeatTime
                 notification.date = self.date
                 notifications.append(notification)
                 userDefaultOperationNotification.saveUserDefault(array: notifications)

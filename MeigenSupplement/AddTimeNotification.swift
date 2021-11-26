@@ -10,7 +10,6 @@ import SwiftUI
 struct AddTimeNotification: View {
     
     @State var date = Date()
-    @State var repeatTime = 0
     
     var body: some View {
         NavigationView{
@@ -22,23 +21,7 @@ struct AddTimeNotification: View {
                 )
                 .datePickerStyle(GraphicalDatePickerStyle())
                 .padding()
-
-                Spacer()
                 
-                HStack {
-                    Image(systemName: "repeat").padding(.leading)
-                    Text("繰り返し")
-//                        .padding(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
-                    Spacer()
-                }
-                
-                Picker(selection: $repeatTime, label: Text("繰り返し")) {
-                    Text("しない").tag(0)
-                    Text("毎日").tag(1)
-                    Text("毎週").tag(2)
-                }
-                .pickerStyle(SegmentedPickerStyle())
-                .padding(/*@START_MENU_TOKEN@*/[.leading, .bottom, .trailing]/*@END_MENU_TOKEN@*/)
                 Spacer()
                 Button("通知済みの通知を表示"){
                     UNUserNotificationCenter.current().getDeliveredNotifications(completionHandler: {noti in print(noti)})
@@ -53,9 +36,10 @@ struct AddTimeNotification: View {
 //                    })
 //                }
                 ToolbarItem(placement: .navigationBarTrailing){
+                    //登録したら、登録しましたとダイアログが出るようにしたいな。
                     Button("登録", action: {
                         //ここに登録コードを書く
-                        TimeNotification(date: $date, repeatTime: $repeatTime).basedOnTimeNotification()
+                        TimeNotification(date: $date).basedOnTimeNotification()
                     })
                 }
             }
