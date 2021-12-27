@@ -15,13 +15,11 @@ import MapKit
 class LocationNotification {
     
     @Binding var setword: String
-    @Binding var repeatLocation: Bool
     let meigen = Meigen()
     //    let locationManager = CLLocationManager()
     
-    init(setword: Binding<String>,repeatLocation: Binding<Bool>) {
+    init(setword: Binding<String>) {
         self._setword = setword
-        self._repeatLocation = repeatLocation
     }
     func basedOnLocationNotification(){
         meigen.getMeigen(callback: sendLocationNotification)
@@ -65,7 +63,7 @@ class LocationNotification {
             let categories = UNNotificationCategory(identifier: "action", actions: [open,addmyfavorite,cancel], intentIdentifiers: [])
             center.setNotificationCategories([categories])
             // ローカル通知リクエストを作成
-            let trigger = UNLocationNotificationTrigger(region: region, repeats: self.repeatLocation)
+            let trigger = UNLocationNotificationTrigger(region: region, repeats: false)
             // ユニークなIDを作る
             let identifier = "L" + UUID().description
             let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
@@ -78,7 +76,6 @@ class LocationNotification {
                     //構造体に追加し、その構造体を配列に保存。その配列をuserdefaaultに保存の処理を書くか。
                     notifications = userDefaultOperationNotification.loadUserDefault()
                     notification.id = identifier
-                    notification.repeatLocation = self.repeatLocation
                     notification.setword = self.setword
                     notifications.append(notification)
                     userDefaultOperationNotification.saveUserDefault(array: notifications)

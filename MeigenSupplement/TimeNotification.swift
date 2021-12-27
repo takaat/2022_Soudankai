@@ -41,9 +41,9 @@ class TimeNotification {     //通知に名言を載せるなら、クラスに�
         let cancel = UNNotificationAction(identifier: "cancel", title: "Cancel", options: .destructive)
         let categories = UNNotificationCategory(identifier: "action", actions: [open,addmyfavorite,cancel], intentIdentifiers: [])
         center.setNotificationCategories([categories])
-        
-        var component = DateComponents()
-       
+               
+        let component = Calendar.current.dateComponents([.year, .month, .day, .weekday,.hour, .minute], from: date)
+
         let trigger = UNCalendarNotificationTrigger(dateMatching: component, repeats: false)
         // ユニークなIDを作る
         let identifier = "T" + UUID().description

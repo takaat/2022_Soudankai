@@ -12,15 +12,16 @@ import CoreLocation
 struct LocationView: View {
     
     @State var inputword = ""
-    @State var setword = ""
-    @State var editting = false
-    @State var repeatLocation = false
+    @State private var setword = ""
+    @State var isEditting = false
+    @State private var isShowAlert = false
+    @State private var isUserLocation: Bool = false
     
     var body: some View {
         
         ZStack{
             
-            MapView(setword: $setword)
+            MapView(setword: $setword,isUserLocation: $isUserLocation)
                 .ignoresSafeArea()
                 .onTapGesture {
                     UIApplication.shared.closeKeyboard()
@@ -28,63 +29,68 @@ struct LocationView: View {
             
             VStack{
                 
-                //                HStack(alignment: .bottom){
-                //
-                //                    TextField("場所または住所を検索します。", text: $inputword,
-                //                              onEditingChanged: { begin in
-                //                        /// 入力開始処理
-                //                        if begin {
-                //                            self.editting = true    // 編集フラグをオン
-                //                            /// 入力終了処理
-                //                        } else {
-                //                            self.editting = false   // 編集フラグをオフ
-                //                        }
-                //                    },onCommit: {setword = inputword})
-                //                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                //                        .padding()
                 VStack {
-                    SearchBar(setword: $setword, editting: $editting)
-                        .frame(width: 355)
-                        .cornerRadius(8)
+                    
+                    SearchBar(setword: $setword, isEditting: $isEditting)
+                    //                        .frame(width: 355)
+                        .cornerRadius(20)
                         .padding([.top, .leading, .trailing])
-                        .shadow(color: editting ? .blue : .clear, radius: 3)
-                    
-                    
-                    //                    .background(Color(.systemBackground))
-                    //                    .cornerRadius(8)
-                    Group {
-                        HStack{
-                            Button("登録", action: {
+                        .shadow(color: isEditting ? .blue : .clear, radius: 3)
+                    //登録したら、登録しましたとダイアログが出るようにしたいな。
+                    HStack{
+                        Spacer()
+                        if #available(iOS 15.0, *){
+                            Button("登 録", action: {
                                 //ここに通知を設定すること})
-                                LocationNotification(setword: $setword,repeatLocation: $repeatLocation).basedOnLocationNotification()
+                                LocationNotification(setword: $setword).basedOnLocationNotification()
+//                                setword = ""
+                                isShowAlert = true
+                                isEditting = false
                             })
+                            
                                 .disabled(setword.isEmpty)
-                            //                            .frame(width: 60, height: 36)
-                            //                            .cornerRadius(8)
-                                .padding(.leading, 25.0)
-                            Spacer()
+                                .frame(width: 80, height:50 )
+                                .background(Color(.systemBackground))
+                                .cornerRadius(20)
+                                .buttonStyle(.borderless)
+                                .padding(/*@START_MENU_TOKEN@*/.horizontal/*@END_MENU_TOKEN@*/)
+                                .alert("登録完了", isPresented: $isShowAlert) {
+//                                    Button("了解") {
+//                                        // 了解ボタンが押された時の処理
+//                                    }
+                                } message: {
+                                    Text("場所指定で登録しました。")
+                                }
+                        }
+                        else{
+                            Button("登 録", action: {
+                                //ここに通知を設定すること})
+                                LocationNotification(setword: $setword).basedOnLocationNotification()
+//                                setword = ""
+                                isShowAlert = true
+                                isEditting = false
+                            })
                             
-                            
-                            Image(systemName: "repeat")
-                            Text("繰り返し")
-                            Toggle("繰り返し", isOn: $repeatLocation)
-                                .labelsHidden()
-                                .padding(.trailing)
-                            
+                                .disabled(setword.isEmpty)
+                                .frame(width: 80, height:50 )
+                                .background(Color(.systemBackground))
+                                .cornerRadius(20)
+                                .padding(/*@START_MENU_TOKEN@*/.horizontal/*@END_MENU_TOKEN@*/)
+                                .buttonStyle(.borderless)
+                                .alert(isPresented: $isShowAlert){
+                                    Alert(title: Text("登録完了"), message: Text("場所指定で登録しました。"))
+                                }
                         }
                     }
-                    .frame(width: 355, height:50 )
-                    //                    .padding()
-                    .background(Color(.systemBackground))
-                    .cornerRadius(8)
+                    Button("現在地", action: { isUserLocation.toggle() })
                     
                 }
-                
                 Spacer()
             }
-        }.navigationBarTitleDisplayMode(.inline)
-    }
+        }
+    }//.navigationBarTitleDisplayMode(.inline)
 }
+
 
 struct LocationView_Previews: PreviewProvider {
     static var previews: some View {
@@ -96,73 +102,79 @@ struct MapView: UIViewRepresentable{
     
     typealias UIViewType = MKMapView
     @Binding var setword: String
-    var locationManeger = CLLocationManager()
+    @Binding var isUserLocation: Bool
+    
     
     func makeUIView(context: Context) -> MKMapView {
-        locationManeger.requestWhenInUseAuthorization()
+        CLLocationManager().requestWhenInUseAuthorization()
         let mapView = MKMapView()
-        let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
-        let region = MKCoordinateRegion(center: mapView.userLocation.coordinate, span: span)
-        mapView.setRegion(region, animated: true)
+        currentUserLocation(uiView: mapView)
         mapView.showsUserLocation = true
         mapView.setUserTrackingMode(.follow, animated: true)
         return mapView
     }
     
     func updateUIView(_ uiView: MKMapView, context: Context) {
+        
         let pin = MKPointAnnotation()
         let searchRequest = MKLocalSearch.Request()
         searchRequest.naturalLanguageQuery = setword
         let search = MKLocalSearch(request: searchRequest)
         search.start{(response,error) in
             guard let target = response?.mapItems.first,
-                  let location = target.placemark.location else{
-                      let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
-                      let region = MKCoordinateRegion(center: uiView.userLocation.coordinate, span: span)
-                      return uiView.setRegion(region, animated: true)
+                  let location = target.placemark.location else {
+                      return currentUserLocation(uiView: uiView)
                   }
             let targetlocation = location.coordinate
             pin.coordinate = targetlocation
             uiView.region = MKCoordinateRegion(center: targetlocation, latitudinalMeters: 500, longitudinalMeters: 500)
             uiView.addAnnotation(pin)
         }
-        
-//        func pressMap(_ sender: UILongPressGestureRecognizer) {
-//
-//            let location:CGPoint = sender.location(in: uiView)
-//            if (sender.state == UIGestureRecognizer.State.ended){
-//                //タップした位置を緯度、経度の座標に変換する。
-//                let mapPoint:CLLocationCoordinate2D = uiView.convert(location,toCoordinateFrom: uiView)
-//                //ピンを作成してマップビューに登録する。
-//                pin.coordinate = CLLocationCoordinate2DMake(mapPoint.latitude, mapPoint.longitude)
-//                uiView.addAnnotation(pin)
-//            }
-//        }
     }
     
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self, isUserLocation: $isUserLocation)
+    }
     
-    //    func updateUIView(_ uiView: MKMapView, context: Context) {
-    //        let geocoder = CLGeocoder()
-    //        let pin = MKPointAnnotation()
-    //        geocoder.geocodeAddressString(setword, completionHandler: {(placemarks,error) in
-    //            guard let location = placemarks?.first?.location else{
-    //                let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
-    //                let region = MKCoordinateRegion(center: uiView.userLocation.coordinate, span: span)
-    //                return uiView.setRegion(region, animated: true)
-    //            }
-    //            let targetlocation = location.coordinate
-    //            pin.coordinate = targetlocation
-    //            uiView.region = MKCoordinateRegion(center: targetlocation, latitudinalMeters: 500, longitudinalMeters: 500)
-    //            uiView.addAnnotation(pin)
-    //        })
-    //    }
+    class Coordinator: NSObject,MKMapViewDelegate {
+        
+        var parent: MapView
+        @Binding var isUserLocation: Bool
+        
+        init(_ parent: MapView,isUserLocation: Binding<Bool>) {
+            self.parent = parent
+            _isUserLocation = isUserLocation
+        }
+        
+        func mapViewWillStartLocatingUser(_ mapView: MKMapView) {
+            currentUserLocation(uiView: mapView)
+        }
+        
+        func showUserLocation() {
+            let mapView = MKMapView()
+            if isUserLocation {
+                currentUserLocation(uiView: mapView)
+                isUserLocation.toggle()
+            }
+        }
+    }
+}
+
+protocol CurrentUserLocationDelegate:NSObjectProtocol {
+    
+}
+
+func currentUserLocation<T>(uiView:T) where T: MKMapView {
+    let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+    let userRegion = MKCoordinateRegion(center: uiView.userLocation.coordinate, span: span)
+    uiView.setRegion(userRegion, animated: true)
 }
 
 struct SearchBar: UIViewRepresentable {
     
     typealias UIViewType = UISearchBar
     @Binding var setword: String
-    @Binding var editting: Bool
+    @Binding var isEditting: Bool
     
     func makeUIView(context: Context) -> UISearchBar {
         
@@ -191,7 +203,7 @@ struct SearchBar: UIViewRepresentable {
         }
         
         func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-            parent.editting = true
+            parent.isEditting = true
         }
         
         func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -203,6 +215,7 @@ struct SearchBar: UIViewRepresentable {
         
         func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
             parent.setword = ""
+            parent.isEditting = false
         }
     }
 }

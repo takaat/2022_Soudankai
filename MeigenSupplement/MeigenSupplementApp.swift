@@ -79,18 +79,6 @@ class AppDelegate: UIResponder,UIApplicationDelegate,UNUserNotificationCenterDel
             }
         }
         
-//        let isrepeat = response.notification.request.trigger?.repeats
-        
-//        if isrepeat == true {
-//            if identifier.hasPrefix("T") == true {
-////                TimeNotification(date: $date, repeatTime: $repeatTime).basedOnTimeNotification()
-//            }
-//            else{
-//
-//            }
-//            center.removePendingNotificationRequests(withIdentifiers: [identifier])
-//        }
-        
         completionHandler()
         
     }

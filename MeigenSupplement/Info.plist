@@ -28,7 +28,7 @@
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>位置情報に基づく通知を行ないます。</string>
+	<string>位置情報に基づき名言を通知します。</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
