@@ -9,16 +9,16 @@ import SwiftUI
 import Foundation
 
 struct NotificationListView: View {
-    
+
     @State private var isShowAlert = false
-    
+
     var body: some View {
         NavigationView{
-            
+
             VStack{
                 NotificationDisplayView()
                     .padding(.vertical)
-                
+
                 if #available(iOS 15.0, *){
                     Button("全消去", action:  {
                         //ユーザーデフォルトを消さないとリストからは消えない。
@@ -53,17 +53,17 @@ struct NotificationListView: View {
         }
     }
 }
-    
+
     struct NotificationListView_Previews: PreviewProvider {
         static var previews: some View {
             NotificationListView()
         }
     }
-    
-    
-    
-    
-    
+
+
+
+
+
     //struct TimeDisplayView: View{
     //
     //    @State private var pendingNotification = PendingNotification()
@@ -145,22 +145,22 @@ struct NotificationListView: View {
     //        return stringWeekday
     //    }
     //}
-    
-    
-    
+
+
+
     // 通知が出た後にuserdefaultから削除する処理を書く必要がある。
-    
+
     struct NotificationDisplayView: View {
-        
+
         //    @State private var pendingNotification = PendingNotification()
         //    @State private var notificationRequests: [UNNotificationRequest] = []
         @State private var notifications = [Notification]()
         @State private var userDefaultOperationNotification = UserDefaultOperationNotification()
-        
+
         var body: some View{
-            
+
             VStack{
-                
+
                 List{
                     ForEach(notifications,id:\.id){ notification in
                         //ここに関数を入れる
@@ -188,12 +188,12 @@ struct NotificationListView: View {
                 removeDeliveredNotificationList()
             }
         }
-        
+
         // 行入れ替え処理
         func rowReplace(_ from: IndexSet, _ to: Int) {
             notifications.move(fromOffsets: from, toOffset: to)
             userDefaultOperationNotification.saveUserDefault(array: notifications)
-            
+
         }
         //行削除をする関数
         func rowRemove(offsets: IndexSet) {
@@ -222,10 +222,10 @@ struct NotificationListView: View {
                 }
             })
         }
-        
-        
-        
-        
+
+
+
+
         //    func locationNotification(_ request: UNNotificationRequest) -> (String,Bool){
         //
         //        for notificaition in notifications{
@@ -236,10 +236,10 @@ struct NotificationListView: View {
         //        return ("",false)
         //    }
     }
-    
-    
-    
-    
+
+
+
+
     //struct ReturnString {
     //
     //    let calender = Calendar.current
@@ -252,8 +252,8 @@ struct NotificationListView: View {
     //        return dateFormatter.string(from: date)
     //    }
     //}
-    
-    
+
+
     //class PendingNotification/*: Identifiable*/ {
     //
     //    let center = UNUserNotificationCenter.current()
@@ -273,42 +273,42 @@ struct NotificationListView: View {
     //
     //    }
     //}
-    
+
     struct Notification: Identifiable,Codable,Hashable {
         var id = ""
-        
+
         var repeatTime = 0
         var date = Date()
-        
+
         var repeatLocation = false
         var setword = ""
     }
-    
+
     struct UserDefaultOperationNotification {
-        
+
         let encoder = JSONEncoder()
         let decoder = JSONDecoder()
         let userDefault = UserDefaults.standard
         let key = "notification_Key"
-        
+
         func saveUserDefault(array:[Notification]){
             guard let encodedValue = try? encoder.encode(array) else{ return }
             userDefault.set(encodedValue, forKey: key)
         }
-        
+
         func loadUserDefault() -> [Notification] {
             guard let savedValue = userDefault.data(forKey: key),
                   let value = try? decoder.decode([Notification].self, from: savedValue) else { return [Notification]() }
             return value
         }
-        
+
         //全消去ボタンを押すとユーザーデフォルトから削除する処理
         func allRemoveUserDefault() {
             userDefault.set([], forKey: key)
         }
     }
-    
-    
+
+
     //                        if /*let day = trigger?.dateComponents.day,*/
     //                           let hour = trigger?.dateComponents.hour,
     //                           let min = trigger?.dateComponents.minute{
@@ -325,11 +325,11 @@ struct NotificationListView: View {
     //
     //                        }
     //                        Group{
-    
+
     //                            let month = trigger!.dateComponents.month
     //                        let date = trigger.dateComponents.hour
     //                            Text(String(month!))
-    
+
     //                        Text(date)
     //                        }
     //                        VStack{
@@ -339,7 +339,7 @@ struct NotificationListView: View {
     //                        }
     //どこかでdateComponentsにCalendarを設定する必要がある。
     //                                dateComponents.calendar = Calendar.current
-    
+
     //                                if dateComponents.month != nil{
     //                                else if dateComponents.weekday != nil{
     //                                    switch dateComponents.weekday {

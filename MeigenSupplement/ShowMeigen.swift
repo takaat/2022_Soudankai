@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ShowMeigen: View{
-    
+
     //    @State var showMeigen = false
     @ObservedObject var meigen = Meigen()
     @Binding var show: Bool
@@ -16,29 +16,29 @@ struct ShowMeigen: View{
     @State private var myFavorites: [MyFavorite] = []
     @State private var myFavorite = MyFavorite()
     let userDefaultOperation = UserDefaultOperation()
-    
+
     var body: some View {
-        
+
         VStack{
             Text(meigen.meigen)
                 .frame(alignment: .leading)
                 .fixedSize(horizontal: false, vertical: true)
                 .font(.system(.title2, design: .monospaced))
                 .padding([.leading, .bottom, .trailing])
-            
+
             HStack{
-                
+
                 Text(meigen.auther)
                     .frame(alignment: .leading)
                     .fixedSize(horizontal: false, vertical: true)
                     .font(.body)
                     .padding([.leading, .bottom, .trailing])
-                
+
                 Spacer()
             }
-            
+
             Button(action: {
-                
+
                 if isFavorite == true{
                     isFavorite = false
                     // お気に入りから削除する処理
@@ -66,7 +66,7 @@ struct ShowMeigen: View{
         }
     }
 }
-    
+
     struct ShowMeigen_Previews: PreviewProvider {
         @State static var show = true
         static var previews: some View {

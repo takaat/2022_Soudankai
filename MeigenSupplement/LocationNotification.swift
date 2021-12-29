@@ -13,11 +13,11 @@ import MapKit
 
 
 class LocationNotification {
-    
+
     @Binding var setword: String
     let meigen = Meigen()
     //    let locationManager = CLLocationManager()
-    
+
     init(setword: Binding<String>) {
         self._setword = setword
     }
@@ -27,22 +27,22 @@ class LocationNotification {
     //        locationManager.requestWhenInUseAuthorization()
     //        locationManager.delegate = self
     func sendLocationNotification(){
-        
+
         let searchRequest = MKLocalSearch.Request()
         searchRequest.naturalLanguageQuery = setword
         let search = MKLocalSearch(request: searchRequest)
-        
+
         search.start{(response,error) in
-            
+
             guard let target = response?.mapItems.first,
                   let region = target.placemark.region else{ return print("位置情報が取得できません")}
             //        let geocoder = CLGeocoder()
-            
+
             //        geocoder.geocodeAddressString(setword, completionHandler: {(placemarks,error) in
-            
+
             //            guard let region = placemarks?.first?.region else{ return print("位置情報が取得できません") }
             region.notifyOnExit = false
-            
+
             //            locationManager.delegate = self
             //            func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
             //                return

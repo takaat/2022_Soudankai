@@ -10,14 +10,12 @@ import UserNotifications
 
 struct ContentView: View {
     
-//    @ObservedObject var meigen = Meigen()
-    //    @State var date: Date = Date()
-    //    @State var inputword = ""
-    //    @State var setword = ""
+    private enum Tag {
+        case calendarView, locationView, homeView, list, favorite
+    }
     
-    @State var show = false
-//    @State var arrayMyfavorite = [MyFavorite]()
-    @State private var selection = 3
+    @State private var show = false
+    @State private var selection = Tag.homeView
     
     var body: some View {
         
@@ -25,40 +23,40 @@ struct ContentView: View {
         
         TabView(selection:$selection){
             
-            AddTimeNotification()
+            CalendarView()
                 .tabItem {
                     Image(systemName: "calendar")
                     Text("日時")
                 }
-                .tag(1)
+                .tag(Tag.calendarView)
             
             LocationView()
                 .tabItem {
                     Image(systemName: "mappin.and.ellipse")
                     Text("場所")
                 }
-                .tag(2)
+                .tag(Tag.locationView)
             
-            ShowMeigen(show: $show)
+            HomeView()
                 .tabItem {
                     Image(systemName: "house")
                     Text("ホーム")
                 }
-                .tag(3)
-            
-            NotificationListView()
-                .tabItem {
-                    Image(systemName: "list.bullet")
-                    Text("通知一覧")
-                }
-                .tag(4)
-            
-            FavoriteView()
-                .tabItem {
-                    Image(systemName: "heart.fill")
-                    Text("お気に入り")
-                }
-                .tag(5)
+                .tag(Tag.homeView)
+//
+//            NotificationListView()
+//                .tabItem {
+//                    Image(systemName: "list.bullet")
+//                    Text("通知一覧")
+//                }
+//                .tag(4)
+//
+//            FavoriteView()
+//                .tabItem {
+//                    Image(systemName: "heart.fill")
+//                    Text("お気に入り")
+//                }
+//                .tag(5)
         }
         
         .onAppear{
