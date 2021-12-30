@@ -8,6 +8,7 @@
 import Foundation
 import UserNotifications
 import CoreLocation
+import SwiftUI
 
 func getMotto(completion: @escaping (String, String) -> Void) {
 
@@ -55,7 +56,6 @@ enum TypeOfTrigger {
     }
 }
 
-// 今は、単純に通知を登録する処理だけを記述する。のちにuserdefaultを追加するかも
 func setNotification(meigen: String, auther: String, typeOfTrigger: TypeOfTrigger) {
     let center = UNUserNotificationCenter.current()
     let content = UNMutableNotificationContent()
@@ -69,7 +69,7 @@ func setNotification(meigen: String, auther: String, typeOfTrigger: TypeOfTrigge
     }
 }
 
-func save<T>(key: String, input:T) where T: Codable {
+func save<T>(key: String, input:T) where T: Codable { // Json使用せずにAny型で処理ができないか要確認
     let encoder = JSONEncoder()
     do {
         let encodedValue = try encoder.encode(input)
@@ -79,15 +79,18 @@ func save<T>(key: String, input:T) where T: Codable {
     }
 }
 
-func load<T>(key: String) -> T where T: Codable { // 出力するときは型を明示すること
+func load<T>(key: String) -> T where T: Codable { // 出力するときは型を明示すること　Json使用せずにAny型で処理ができないか要確認
     let decoder = JSONDecoder()
-    guard let savedValue = UserDefaults.standard.data(forKey: key) else { fatalError() }
+    guard let savedValue = UserDefaults.standard.data(forKey: key) else { return [Motto]() as! T }
     do {
-        let value = try decoder.decode(T.self, from: savedValue)
-        return value
+        return try decoder.decode(T.self, from: savedValue)
     } catch {
         fatalError(error.localizedDescription)
     }
 }
-
 // ユーザーデフォルトの消去メソッドはあり。
+
+enum TypeOfkey: String {
+    case history = "History"
+    case notification = "Notification" // 通知一覧を作成するときに使用するかも
+}

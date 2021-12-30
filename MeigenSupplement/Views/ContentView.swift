@@ -11,18 +11,14 @@ import UserNotifications
 struct ContentView: View {
     
     private enum Tag {
-        case calendarView, locationView, homeView, list, favorite
+        case calendarView, locationView, homeView, list, history
     }
     
     @State private var show = false
-    @State private var selection = Tag.homeView
+    @State private var selection: Tag = .homeView
     
     var body: some View {
-        
-        
-        
-        TabView(selection:$selection){
-            
+        TabView(selection:$selection) {
             CalendarView()
                 .tabItem {
                     Image(systemName: "calendar")
@@ -51,12 +47,12 @@ struct ContentView: View {
 //                }
 //                .tag(4)
 //
-//            FavoriteView()
-//                .tabItem {
-//                    Image(systemName: "heart.fill")
-//                    Text("お気に入り")
-//                }
-//                .tag(5)
+            HistoryView()
+                .tabItem {
+                    Image(systemName: "square.3.layers.3d.down.right")
+                    Text("履歴")
+                }
+                .tag(Tag.history)
         }
         
         .onAppear{

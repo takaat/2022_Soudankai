@@ -17,7 +17,7 @@ struct LocationView: View {
         let coordinate: CLLocationCoordinate2D
     }
 
-    @StateObject var coordinator = LocationCoordinator()
+    @StateObject var locationModel = LocationModel()
     @State private var inputText = ""
     @State private var preRegion: CLLocationCoordinate2D?
     @State private var isShowAlert = false
@@ -25,7 +25,7 @@ struct LocationView: View {
 
     var body: some View {
         VStack{
-            Map(coordinateRegion: $coordinator.region,
+            Map(coordinateRegion: $locationModel.region,
                 showsUserLocation: true,
                 annotationItems: annotationItems) { item in
                 MapMarker(coordinate: item.coordinate, tint: .purple)
@@ -36,11 +36,11 @@ struct LocationView: View {
                 TextField("", text: $inputText, prompt: Text("場所を入力"))
                     .padding()
                     .onSubmit {
-                        coordinator.localSearch(
-                            inputRegion: coordinator.region,
+                        locationModel.localSearch(
+                            inputRegion: locationModel.region,
                             inputText: inputText) { targetRegion in
                                 preRegion = targetRegion
-                                coordinator.region.center = targetRegion
+                                locationModel.region.center = targetRegion
                                 annotationItems.append(.init(coordinate: targetRegion))
                             }
                         closeKeyboard()
@@ -55,8 +55,8 @@ struct LocationView: View {
                 }
 
                 Button(action: {
-                    coordinator.requestLocation()
-                    coordinator.setup(didUpdate: { userLocation in coordinator.region.center = userLocation.coordinate})
+                    locationModel.requestLocation()
+                    locationModel.setup(didUpdate: { userLocation in locationModel.region.center = userLocation.coordinate})
                 }, label: { Label("現在地", systemImage: "location.fill").foregroundColor(.red) })
             }
         }
@@ -64,8 +64,8 @@ struct LocationView: View {
             Text("場所指定で登録しました。")
         }
         .onAppear{
-            coordinator.startCoodinator()
-            coordinator.setup { userLocation in coordinator.region.center = userLocation.coordinate }
+            locationModel.startup()
+            locationModel.setup { userLocation in locationModel.region.center = userLocation.coordinate }
         }
         .onTapGesture {
             closeKeyboard()

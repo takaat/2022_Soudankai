@@ -10,6 +10,8 @@ import SwiftUI
 
 struct Motto: Hashable,Codable,Identifiable {
     var id = UUID()
+    var timeStamp = Date()
+    
     var meigen: String
     var auther: String
     var isfavorite: Bool = false

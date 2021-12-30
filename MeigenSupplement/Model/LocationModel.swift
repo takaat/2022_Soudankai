@@ -9,13 +9,13 @@ import Foundation
 import CoreLocation
 import MapKit
 
-class LocationCoordinator: NSObject, ObservableObject, CLLocationManagerDelegate {
+class LocationModel: NSObject, ObservableObject, CLLocationManagerDelegate {
 
     @Published var region: MKCoordinateRegion = .init(center: .init(), span: .init(latitudeDelta: 0.003, longitudeDelta: 0.003))
     private let locationManager = CLLocationManager()
     private var didUpdate: (CLLocation) -> Void = { _ in }
 
-    func startCoodinator()  {
+    func startup()  {
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
     }
@@ -46,7 +46,7 @@ class LocationCoordinator: NSObject, ObservableObject, CLLocationManagerDelegate
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("エラー発生\(error)")
+        print("エラー発生:\(error.localizedDescription)")
         return
     }
 }
