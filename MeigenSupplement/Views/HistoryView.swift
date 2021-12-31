@@ -14,7 +14,7 @@ struct HistoryView: View {
     private enum HistoryOrFavorite: Bool {
         case history = false
     }
-
+// Landmarkの模倣をするか、ピッカーを使うか検討する。
     var filteredMottos: [Motto] {
         history.mottos.filter { motto in
             !isShowfavorite || motto.isfavorite }
