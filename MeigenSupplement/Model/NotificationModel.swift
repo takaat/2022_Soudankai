@@ -10,11 +10,11 @@ import UserNotifications
 import SwiftUI
 
 class NotificationModel: NSObject, ObservableObject, UNUserNotificationCenterDelegate {
+    @Environment(\.managedObjectContext) private var context
     private let center = UNUserNotificationCenter.current()
-    @EnvironmentObject var historyModel: HistoryModel
+    @EnvironmentObject private var cdmodel: CDModel
 
     func startup() {
-        // あとでhttps://developer.apple.com/documentation/usernotifications/asking_permission_to_use_notificationsを読んで実装する
         center.delegate = self
         center.requestAuthorization(options: [.alert,.sound,.badge]) { granted, error in
             if granted {
@@ -31,7 +31,7 @@ class NotificationModel: NSObject, ObservableObject, UNUserNotificationCenterDel
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         let meigen = response.notification.request.content.body
         let auther = response.notification.request.content.subtitle
-        historyModel.mottos.append(Motto(meigen: meigen, auther: auther))
+        cdmodel.addMotto(context: context, meigen: meigen, auther: auther)
         completionHandler()
     }
 }

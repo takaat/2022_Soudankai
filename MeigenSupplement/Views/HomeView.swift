@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct HomeView: View {
+    @Environment(\.managedObjectContext) private var context
     @State private var meigen = ""
     @State private var auther = ""
-    @EnvironmentObject var historyModel: HistoryModel
+    @EnvironmentObject private var cdmodel: CDModel
 
     var body: some View {
         NavigationView {
@@ -23,7 +24,7 @@ struct HomeView: View {
             getMotto { meigen, auther in
                 self.meigen = meigen
                 self.auther = auther
-                historyModel.mottos.append(Motto(meigen: meigen, auther: auther))
+                cdmodel.addMotto(context: context, meigen: meigen, auther: auther)
             }
         }
     }

@@ -11,20 +11,22 @@ import CoreLocation
 
 @main
 struct MeigenSupplementApp: App {
-    @StateObject private var historyModel = HistoryModel()
+    let persistenceController = PersistenceController.shared
     @StateObject private var notificationModel = NotificationModel()
+    @StateObject private var cdmodel = CDModel()
     @Environment(\.scenePhase) var scenePhase
 //    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(historyModel)
+                .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .environmentObject(notificationModel)
+                .environmentObject(cdmodel)
                 .onChange(of: scenePhase) { newScenePhase in
                     switch newScenePhase {
-                    case .inactive:
-                        save(key: TypeOfkey.history.rawValue, input: historyModel.mottos)
+//                    case .inactive:
+//                        save(key: TypeOfkey.history.rawValue, input: historyModel.mottos)
                     case .active:
                         notificationModel.startup()
                     default: break

@@ -69,28 +69,28 @@ func setNotification(meigen: String, auther: String, typeOfTrigger: TypeOfTrigge
     }
 }
 
-func save<T>(key: String, input:T) where T: Codable { // Json使用せずにAny型で処理ができないか要確認
-    let encoder = JSONEncoder()
-    do {
-        let encodedValue = try encoder.encode(input)
-        UserDefaults.standard.set(encodedValue, forKey: key)
-    } catch  {
-        fatalError(error.localizedDescription)
-    }
-}
-
-func load<T>(key: String) -> T where T: Codable { // 出力するときは型を明示すること　Json使用せずにAny型で処理ができないか要確認
-    let decoder = JSONDecoder()
-    guard let savedValue = UserDefaults.standard.data(forKey: key) else { return [Motto]() as! T }
-    do {
-        return try decoder.decode(T.self, from: savedValue)
-    } catch {
-        fatalError(error.localizedDescription)
-    }
-}
-// ユーザーデフォルトの消去メソッドはあり。
-
-enum TypeOfkey: String {
-    case history = "History"
-    case notification = "Notification" // 通知一覧を作成するときに使用するかも
-}
+//func save<T>(key: String, input:T) where T: Codable { // Json使用せずにAny型で処理ができないか要確認
+//    let encoder = JSONEncoder()
+//    do {
+//        let encodedValue = try encoder.encode(input)
+//        UserDefaults.standard.set(encodedValue, forKey: key)
+//    } catch  {
+//        fatalError(error.localizedDescription)
+//    }
+//}
+//
+//func load<T>(key: String) -> T where T: Codable { // 出力するときは型を明示すること　Json使用せずにAny型で処理ができないか要確認
+//    let decoder = JSONDecoder()
+//    guard let savedValue = UserDefaults.standard.data(forKey: key) else { return [Motto]() as! T }
+//    do {
+//        return try decoder.decode(T.self, from: savedValue)
+//    } catch {
+//        fatalError(error.localizedDescription)
+//    }
+//}
+//// ユーザーデフォルトの消去メソッドはあり。
+//
+//enum TypeOfkey: String {
+//    case history = "History"
+//    case notification = "Notification" // 通知一覧を作成するときに使用するかも
+//}
