@@ -11,12 +11,18 @@ struct PersistenceController {
     static let shared = PersistenceController()
 
     static var preview: PersistenceController = {
+        let sample = [["細かい仕事に細分化すれば、さして困難なものはない。", "ヘンリー・フォード"], ["二つの矢を持つことなかれ。後の矢を頼みて初の矢になおざりの心あり。", "吉田兼好"], ["どんな大きな流れも、きっかけは一人の小さな行動から生まれます。", "ダライ・ラマ14世"]]
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
-//        for _ in 0..<10 {
-//            let newItem = Item(context: viewContext)
-//            newItem.timestamp = Date()
-//        }
+        for i in 0..<3 {
+            let newMotto = Motto(context: viewContext)
+            newMotto.id = UUID()
+            newMotto.timestamp = Date()
+            newMotto.isFavorite = false
+            newMotto.meigen = sample[i][0]
+            newMotto.auther = sample[i][1]
+        }
+
         do {
             try viewContext.save()
         } catch {

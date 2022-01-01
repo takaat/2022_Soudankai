@@ -11,8 +11,10 @@ import SwiftUI
 
 class NotificationModel: NSObject, ObservableObject, UNUserNotificationCenterDelegate {
     @Environment(\.managedObjectContext) private var context
+//    @Published var requests: [UNNotificationRequest] = []
     private let center = UNUserNotificationCenter.current()
-    @EnvironmentObject private var cdmodel: CDModel
+//    @EnvironmentObject private var cdmodel: CDModel //コンテントビューの子孫ではないため
+    let cdmodel = CDModel()
 
     func startup() {
         center.delegate = self
@@ -20,6 +22,12 @@ class NotificationModel: NSObject, ObservableObject, UNUserNotificationCenterDel
             if granted {
                 print("通知許可を得た")
             }
+        }
+    }
+
+    func setRequests(comletion: @escaping ([UNNotificationRequest]) -> Void) {
+        center.getPendingNotificationRequests { requests in
+            comletion(requests)
         }
     }
 

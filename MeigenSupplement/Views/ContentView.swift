@@ -39,14 +39,14 @@ struct ContentView: View {
                     Text("ホーム")
                 }
                 .tag(Tag.homeView)
-//
-//            NotificationListView()
-//                .tabItem {
-//                    Image(systemName: "list.bullet")
-//                    Text("通知一覧")
-//                }
-//                .tag(4)
-//
+
+            NotificationListView()
+                .tabItem {
+                    Image(systemName: "list.bullet")
+                    Text("通知一覧")
+                }
+                .tag(Tag.list)
+
             HistoryView()
                 .tabItem {
                     Image(systemName: "square.3.layers.3d.down.right")
@@ -55,10 +55,10 @@ struct ContentView: View {
                 .tag(Tag.history)
         }
         
-        .onAppear{
-            
-            NotificationCenter.default.addObserver(forName: NSNotification.Name("ShowMeigen"), object: nil, queue: .main, using: {(_) in self.show = true })
-        }
+        //        .onAppear{
+        //
+        //            NotificationCenter.default.addObserver(forName: NSNotification.Name("ShowMeigen"), object: nil, queue: .main, using: {(_) in self.show = true })
+        //        }
     }
 }
 
@@ -68,20 +68,20 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-func getPendingNotification(){
-    let center = UNUserNotificationCenter.current()
-    center.getPendingNotificationRequests(completionHandler: {arrReq in
-        for req in arrReq{
-            
-            guard let trigger = req.trigger else { return }
-            
-            //            guard let catrigger = trigger as? UNCalendarNotificationTrigger else { return }
-            //            print("通知IDは\(req.identifier),トリガー条件は、\(trigger),次の通知は\(catrigger.nextTriggerDate())")
-            print("通知IDは\(req.identifier),トリガーは\(trigger),内容は\(req.content)")
-        }
-    })
-    
-}
+//func getPendingNotification(){
+//    let center = UNUserNotificationCenter.current()
+//    center.getPendingNotificationRequests(completionHandler: {arrReq in
+//        for req in arrReq{
+//
+//            guard let trigger = req.trigger else { return }
+//
+//            //            guard let catrigger = trigger as? UNCalendarNotificationTrigger else { return }
+//            //            print("通知IDは\(req.identifier),トリガー条件は、\(trigger),次の通知は\(catrigger.nextTriggerDate())")
+//            print("通知IDは\(req.identifier),トリガーは\(trigger),内容は\(req.content)")
+//        }
+//    })
+//
+//}
 
 //NavigationView{
 //

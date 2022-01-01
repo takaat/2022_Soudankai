@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 
-class CDModel: ObservableObject {
+class CDModel: NSObject, ObservableObject {
 // パブリッシャー必要かな
     @Published var id = UUID()
     @Published var timestamp = Date()
