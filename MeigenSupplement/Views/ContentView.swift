@@ -11,7 +11,7 @@ import UserNotifications
 struct ContentView: View {
     
     private enum Tag {
-        case calendarView, locationView, homeView, list, history
+        case calendarView, locationView, homeView, notificationListView, historyView
     }
     
     @State private var show = false
@@ -45,14 +45,14 @@ struct ContentView: View {
                     Image(systemName: "list.bullet")
                     Text("通知一覧")
                 }
-                .tag(Tag.list)
+                .tag(Tag.notificationListView)
 
             HistoryView()
                 .tabItem {
                     Image(systemName: "square.3.layers.3d.down.right")
                     Text("履歴")
                 }
-                .tag(Tag.history)
+                .tag(Tag.historyView)
         }
         
         //        .onAppear{

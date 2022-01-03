@@ -13,7 +13,7 @@ struct HistoryView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \Motto.timestamp, ascending: false)],
         animation: .default)
     private var mottos: FetchedResults<Motto>
-    @EnvironmentObject private var cdmodel: CDModel
+    @EnvironmentObject private var coredatamodel: CoreDataModel
     @State private var isShowFavorite = false
 
     var filterdMottos: [Motto] {
@@ -37,7 +37,8 @@ struct HistoryView: View {
                             motto.isFavorite.toggle()
                             try? context.save()
                         }, label: {
-                            Image(systemName: motto.isFavorite ? "heart.fill" : "heart").foregroundColor(.yellow)})
+                            Image(systemName: motto.isFavorite ? "heart.fill" : "heart")
+                            .foregroundColor(motto.isFavorite ? .yellow : .gray)})
                     }
                 }
                 .onDelete { indexSet in

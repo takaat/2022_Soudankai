@@ -11,7 +11,7 @@ struct HomeView: View {
     @Environment(\.managedObjectContext) private var context
     @State private var meigen = ""
     @State private var auther = ""
-    @EnvironmentObject private var cdmodel: CDModel
+    @EnvironmentObject private var coredatamodel: CoreDataModel
 
     var body: some View {
         NavigationView {
@@ -24,7 +24,7 @@ struct HomeView: View {
             getMotto { meigen, auther in
                 self.meigen = meigen
                 self.auther = auther
-                cdmodel.addMotto(context: context, meigen: meigen, auther: auther)
+                coredatamodel.addMotto(context: context, meigen: meigen, auther: auther)
             }
         }
     }

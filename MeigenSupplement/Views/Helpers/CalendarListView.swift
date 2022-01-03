@@ -8,35 +8,47 @@
 import SwiftUI
 
 struct CalendarListView: View {
-//    @EnvironmentObject var notificationModel: NotificationModel
     @State private var requests: [UNNotificationRequest] = []
 
+    var values: [(String, Date)] {
+        filterRequests(requests: requests) //日付順に並び替えできないか試す。
+    }
+
     var body: some View {
-        NavigationView {
-            List {
-                ForEach(requests, id: \.self) { request in
-                    if let trigger = request.trigger as? UNCalendarNotificationTrigger,
-                       let date = trigger.dateComponents.date {
-                        Text(DateFormatter().string(from: date))
-                    }
-                }
-                Text("CalendarListView")
+        List {
+            Text("日時で登録した通知")
+            ForEach(values, id: \.0) { value in
+                Text(makeDateText(date:value.1))
+            }
+            .onDelete { index in
+                deleteNotification(offset: index)
             }
         }
+        .listStyle(.plain)
         .onAppear {
             UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
                 self.requests = requests
-                print(self.requests)
             }
         }
-        .navigationTitle("日時で登録した通知")
-        .navigationBarTitleDisplayMode(.inline)
+    }
 
+    private func makeDateText(date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .medium
+        return formatter.string(from: date)
+    }
+
+    private func deleteNotification(offset: IndexSet) {
+        let identifier = values[offset.first ?? 0].0 // 削除対象のidentifierを取り出す
+        let filterdArray = requests.filter { $0.identifier == identifier } // requestsの配列からidentifierが一致する要素を探す
+        let targetindex = requests.firstIndex(of: filterdArray[0]) // indexを取り出して削除する。
+        requests.remove(at: targetindex ?? 0)
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
     }
 }
-
-struct CalendarListView_Previews: PreviewProvider {
-    static var previews: some View {
-        CalendarListView()
-    }
-}
+//struct CalendarListView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        CalendarListView()
+//    }
+//}

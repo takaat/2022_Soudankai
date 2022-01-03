@@ -16,7 +16,7 @@ struct PersistenceController {
         let viewContext = result.container.viewContext
         for i in 0..<3 {
             let newMotto = Motto(context: viewContext)
-            newMotto.id = UUID()
+            newMotto.uuid = UUID()
             newMotto.timestamp = Date()
             newMotto.isFavorite = false
             newMotto.meigen = sample[i][0]

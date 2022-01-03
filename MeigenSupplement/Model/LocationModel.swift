@@ -47,6 +47,6 @@ class LocationModel: NSObject, ObservableObject, CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("エラー発生:\(error.localizedDescription)")
-        return
+
     }
 }

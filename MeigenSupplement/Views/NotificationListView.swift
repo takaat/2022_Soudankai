@@ -12,22 +12,25 @@ struct NotificationListView: View {
     @State private var selection = "日時"
 
     var body: some View {
-        VStack {
-            Picker("", selection: $selection) {
-                ForEach(types, id: \.self) { type in
-                    Text(type)
+        NavigationView {
+            VStack {
+                Picker("", selection: $selection) {
+                    ForEach(types, id: \.self) { type in
+                        Text(type)
+                    }
                 }
-            }
-            .pickerStyle(.segmented)
-            .padding()
+                .padding(/*@START_MENU_TOKEN@*/[.top, .leading, .trailing]/*@END_MENU_TOKEN@*/)
+                .pickerStyle(.segmented)
 
-            if selection == "日時" {
-                CalendarListView()
-            } else {
-                LocationListView()
-            }
+                if selection == "日時" {
+                    CalendarListView()
+                } else {
+                    LocationListView()
+                }
 
-            Spacer()
+                Spacer()
+            }
+            .navigationBarTitle("登録した通知", displayMode: .inline)
         }
     }
 }

@@ -14,7 +14,7 @@ class NotificationModel: NSObject, ObservableObject, UNUserNotificationCenterDel
 //    @Published var requests: [UNNotificationRequest] = []
     private let center = UNUserNotificationCenter.current()
 //    @EnvironmentObject private var cdmodel: CDModel //コンテントビューの子孫ではないため
-    let cdmodel = CDModel()
+    let coreDataModel = CoreDataModel()
 
     func startup() {
         center.delegate = self
@@ -25,13 +25,16 @@ class NotificationModel: NSObject, ObservableObject, UNUserNotificationCenterDel
         }
     }
 
-    func setRequests(comletion: @escaping ([UNNotificationRequest]) -> Void) {
-        center.getPendingNotificationRequests { requests in
-            comletion(requests)
-        }
-    }
+//    func setRequests(comletion: @escaping ([UNNotificationRequest]) -> Void) {
+//        center.getPendingNotificationRequests { requests in
+//            comletion(requests)
+//        }
+//    }
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        let meigen = notification.request.content.body
+        let auther = notification.request.content.subtitle
+        coreDataModel.addMotto(context: context, meigen: meigen, auther: auther)
         completionHandler([.banner, .sound, .list])
         print("フォアグランドで通知発火")
     }
@@ -39,7 +42,7 @@ class NotificationModel: NSObject, ObservableObject, UNUserNotificationCenterDel
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         let meigen = response.notification.request.content.body
         let auther = response.notification.request.content.subtitle
-        cdmodel.addMotto(context: context, meigen: meigen, auther: auther)
+        coreDataModel.addMotto(context: context, meigen: meigen, auther: auther)
         completionHandler()
     }
 }

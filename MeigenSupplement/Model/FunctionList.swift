@@ -9,6 +9,7 @@ import Foundation
 import UserNotifications
 import CoreLocation
 import SwiftUI
+import MapKit
 
 func getMotto(completion: @escaping (String, String) -> Void) {
 
@@ -29,7 +30,7 @@ func getMotto(completion: @escaping (String, String) -> Void) {
 
         do {
             guard let data = data else { return }
-            let results = try JSONDecoder().decode([ResultJson].self,from: data)
+            let results = try JSONDecoder().decode([ResultJson].self, from: data)
             completion(results[0].meigen ?? "", results[0].auther ?? "")
         }
         catch{
@@ -67,6 +68,62 @@ func setNotification(meigen: String, auther: String, typeOfTrigger: TypeOfTrigge
             fatalError(error.localizedDescription)
         }
     }
+}
+
+//func filterRequests(requests: [UNNotificationRequest]) -> [Date] {
+//    var tmpDates: [Date] = []
+//
+//    for request in requests {
+//        if let trigger = request.trigger,
+//           trigger is UNCalendarNotificationTrigger,
+//           let trigger = trigger as? UNCalendarNotificationTrigger {
+//            var dateComponents = trigger.dateComponents
+//            dateComponents.calendar = .current
+//            tmpDates.append(dateComponents.date ?? Date())
+//        } else {
+//            //locatintrigger
+//        }
+//    }
+//    return tmpDates
+//}
+
+func filterRequests(requests: [UNNotificationRequest]) -> [(identifier: String, date: Date)] {
+    var tempArray: [(String, Date)] = []
+    var tempTuple = ("", Date())
+
+    for request in requests {
+        tempTuple.0 = request.identifier
+
+        if let trigger = request.trigger,
+           trigger is UNCalendarNotificationTrigger,
+           let trigger = trigger as? UNCalendarNotificationTrigger {
+            var dateComponents = trigger.dateComponents
+            dateComponents.calendar = .current
+            tempTuple.1 = dateComponents.date ?? Date()
+            tempArray.append(tempTuple)
+        }
+    }
+    return tempArray
+}
+
+func filterRequests(requests: [UNNotificationRequest]) -> [(identifier: String, data: MKCoordinateRegion)] {
+    var tempArray: [(String, MKCoordinateRegion)] = []
+    var tempTuple = ("", MKCoordinateRegion())
+
+    for request in requests {
+        tempTuple.0 = request.identifier
+
+        if let trigger = request.trigger,
+           trigger is UNLocationNotificationTrigger,
+           let trigger = trigger as? UNLocationNotificationTrigger {
+            let region = trigger.region as? CLCircularRegion
+            let mkRegion = MKCoordinateRegion(center: region?.center ?? .init(),
+                                           span: MKCoordinateSpan(latitudeDelta: 0.003, longitudeDelta: 0.003))
+            tempTuple.1 = mkRegion
+            tempArray.append(tempTuple)
+        }
+    }
+    return tempArray
 }
 
 //func save<T>(key: String, input:T) where T: Codable { // Json使用せずにAny型で処理ができないか要確認

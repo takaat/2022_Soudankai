@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 
-class CDModel: NSObject, ObservableObject {
+class CoreDataModel: NSObject, ObservableObject {
 // パブリッシャー必要かな
     @Published var id = UUID()
     @Published var timestamp = Date()
@@ -18,7 +18,7 @@ class CDModel: NSObject, ObservableObject {
 
     func addMotto(context : NSManagedObjectContext, meigen: String, auther: String) {
         let newMotto = Motto(context: context)
-        newMotto.id = UUID()
+        newMotto.uuid = UUID()
         newMotto.timestamp = Date()
         newMotto.isFavorite = false
         newMotto.meigen = meigen
