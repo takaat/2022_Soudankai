@@ -17,7 +17,7 @@ struct HistoryView: View {
     @State private var isShowFavorite = false
 
     var filterdMottos: [Motto] {
-        mottos.filter ({ motto in
+        mottos.filter({ motto in
             (!isShowFavorite || motto.isFavorite) })
         }
 
@@ -62,10 +62,8 @@ struct HistoryView: View {
     }
 
     private func moveItems() {
-
     }
 }
-
 
 struct HistoryView_Previews: PreviewProvider {
     static var previews: some View {

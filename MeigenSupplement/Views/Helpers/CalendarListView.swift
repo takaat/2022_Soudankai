@@ -11,14 +11,16 @@ struct CalendarListView: View {
     @State private var requests: [UNNotificationRequest] = []
 
     var values: [(String, Date)] {
-        filterRequests(requests: requests) //日付順に並び替えできないか試す。
+        filterRequests(requests: requests) // 日付順に並び替えできないか試す。
     }
 
     var body: some View {
         List {
             Text("日時で登録した通知")
+                .font(.title)
             ForEach(values, id: \.0) { value in
-                Text(makeDateText(date:value.1))
+                Text(makeDateText(date: value.1))
+                    .font(.title2)
             }
             .onDelete { index in
                 deleteNotification(offset: index)
@@ -34,8 +36,8 @@ struct CalendarListView: View {
 
     private func makeDateText(date: Date) -> String {
         let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .medium
+        formatter.dateStyle = .full
+        formatter.timeStyle = .short
         return formatter.string(from: date)
     }
 
@@ -47,8 +49,8 @@ struct CalendarListView: View {
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
     }
 }
-//struct CalendarListView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        CalendarListView()
-//    }
-//}
+ struct CalendarListView_Previews: PreviewProvider {
+    static var previews: some View {
+        CalendarListView()
+    }
+ }

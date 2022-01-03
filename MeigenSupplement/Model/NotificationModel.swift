@@ -18,7 +18,7 @@ class NotificationModel: NSObject, ObservableObject, UNUserNotificationCenterDel
 
     func startup() {
         center.delegate = self
-        center.requestAuthorization(options: [.alert,.sound,.badge]) { granted, error in
+        center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, _ in
             if granted {
                 print("通知許可を得た")
             }
@@ -31,7 +31,10 @@ class NotificationModel: NSObject, ObservableObject, UNUserNotificationCenterDel
 //        }
 //    }
 
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler:
+                                @escaping (UNNotificationPresentationOptions) -> Void) {
         let meigen = notification.request.content.body
         let auther = notification.request.content.subtitle
         coreDataModel.addMotto(context: context, meigen: meigen, auther: auther)
@@ -39,7 +42,9 @@ class NotificationModel: NSObject, ObservableObject, UNUserNotificationCenterDel
         print("フォアグランドで通知発火")
     }
 
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
         let meigen = response.notification.request.content.body
         let auther = response.notification.request.content.subtitle
         coreDataModel.addMotto(context: context, meigen: meigen, auther: auther)

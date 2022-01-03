@@ -9,10 +9,8 @@ import SwiftUI
 import MapKit
 import CoreLocation
 
-
 struct LocationView: View {
-
-    struct AnnotationItemStruct: Identifiable{
+    struct AnnotationItemStruct: Identifiable {
         let id = UUID()
         let coordinate: CLLocationCoordinate2D
     }
@@ -24,7 +22,7 @@ struct LocationView: View {
     @State var annotationItems: [AnnotationItemStruct] = []
 
     var body: some View {
-        VStack{
+        VStack {
             Map(coordinateRegion: $locationModel.region,
                 showsUserLocation: true,
                 annotationItems: annotationItems) { item in
@@ -47,23 +45,28 @@ struct LocationView: View {
                     }
 
                 Button("登録") {
-                    let region = CLCircularRegion(center: preRegion ?? .init(), radius: 1000, identifier: UUID().uuidString)
+                    let region = CLCircularRegion(center: preRegion ?? .init(),
+                                                  radius: 1000,
+                                                  identifier: UUID().uuidString)
                     region.notifyOnExit = false
                     getMotto { meigen, auther in
-                        setNotification(meigen: meigen, auther: auther, typeOfTrigger: .location(region))
-                    }
+                        setNotification(meigen: meigen,
+                                        auther: auther,
+                                        typeOfTrigger: .location(region))}
                 }
 
                 Button(action: {
                     locationModel.requestLocation()
-                    locationModel.setup(didUpdate: { userLocation in locationModel.region.center = userLocation.coordinate})
+                    locationModel.setup(didUpdate: { userLocation in
+                        locationModel.region.center = userLocation.coordinate})
                 }, label: { Label("現在地", systemImage: "location.fill").foregroundColor(.red) })
             }
         }
-        .alert("登録完了", isPresented: $isShowAlert) {
-            Text("場所指定で登録しました。")
-        }
-        .onAppear{
+        .alert("登録完了",
+               isPresented: $isShowAlert,
+               actions: {},
+               message: {Text("場所指定で登録しました。")})
+        .onAppear {
             locationModel.startup()
             locationModel.setup { userLocation in locationModel.region.center = userLocation.coordinate }
         }

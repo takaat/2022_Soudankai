@@ -17,21 +17,14 @@
 		BF10F61A26199412007F1C68 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF10F61926199412007F1C68 /* Assets.xcassets */; };
 		BF10F61D26199412007F1C68 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BF10F61C26199412007F1C68 /* Preview Assets.xcassets */; };
 		BF10F627261995A3007F1C68 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF10F626261995A3007F1C68 /* CoreLocation.framework */; };
-		BF10F629261996C0007F1C68 /* ShowMeigen.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF10F628261996C0007F1C68 /* ShowMeigen.swift */; };
 		BF10F62D261996F5007F1C68 /* FunctionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF10F62C261996F5007F1C68 /* FunctionList.swift */; };
-		BF10F63026199742007F1C68 /* TimeNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF10F62F26199742007F1C68 /* TimeNotification.swift */; };
-		BF10F6332619979D007F1C68 /* LocationNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF10F6322619979D007F1C68 /* LocationNotification.swift */; };
 		BF10F636261997CF007F1C68 /* LocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF10F635261997CF007F1C68 /* LocationView.swift */; };
-		BF10F63926199809007F1C68 /* FavoriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF10F63826199809007F1C68 /* FavoriteView.swift */; };
 		BF15366227803214004C715F /* CalendarListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15366127803214004C715F /* CalendarListView.swift */; };
 		BF15366427803D3A004C715F /* NotificationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15366327803D3A004C715F /* NotificationListView.swift */; };
 		BF15366627803DD7004C715F /* LocationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF15366527803DD7004C715F /* LocationListView.swift */; };
 		BF159DB12620925B0016A281 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF159DB02620925B0016A281 /* CalendarView.swift */; };
 		BF84B5592782C430005C81C8 /* LocationRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF84B5582782C430005C81C8 /* LocationRowView.swift */; };
 		BF84B55B2782D22C005C81C8 /* MKMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF84B55A2782D22C005C81C8 /* MKMapView.swift */; };
-		BF93D80D2623366800320E50 /* NotificationsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF93D80C2623366800320E50 /* NotificationsListView.swift */; };
-		BF9ADCD32779D0C500EC8EDE /* Motto.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF9ADCD22779D0C500EC8EDE /* Motto.swift */; };
-		BFAC3FA8277D0DF5003BE100 /* HistoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAC3FA7277D0DF5003BE100 /* HistoryModel.swift */; };
 		BFAC3FAA277D27E1003BE100 /* NotificationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAC3FA9277D27E1003BE100 /* NotificationModel.swift */; };
 		BFAC3FAC277D3739003BE100 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAC3FAB277D3739003BE100 /* HistoryView.swift */; };
 /* End PBXBuildFile section */
@@ -49,21 +42,14 @@
 		BF10F61C26199412007F1C68 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		BF10F61E26199412007F1C68 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BF10F626261995A3007F1C68 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		BF10F628261996C0007F1C68 /* ShowMeigen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowMeigen.swift; sourceTree = "<group>"; };
 		BF10F62C261996F5007F1C68 /* FunctionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionList.swift; sourceTree = "<group>"; };
-		BF10F62F26199742007F1C68 /* TimeNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeNotification.swift; sourceTree = "<group>"; };
-		BF10F6322619979D007F1C68 /* LocationNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationNotification.swift; sourceTree = "<group>"; };
 		BF10F635261997CF007F1C68 /* LocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationView.swift; sourceTree = "<group>"; };
-		BF10F63826199809007F1C68 /* FavoriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteView.swift; sourceTree = "<group>"; };
 		BF15366127803214004C715F /* CalendarListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarListView.swift; sourceTree = "<group>"; };
 		BF15366327803D3A004C715F /* NotificationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationListView.swift; sourceTree = "<group>"; };
 		BF15366527803DD7004C715F /* LocationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationListView.swift; sourceTree = "<group>"; };
 		BF159DB02620925B0016A281 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		BF84B5582782C430005C81C8 /* LocationRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationRowView.swift; sourceTree = "<group>"; };
 		BF84B55A2782D22C005C81C8 /* MKMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MKMapView.swift; sourceTree = "<group>"; };
-		BF93D80C2623366800320E50 /* NotificationsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsListView.swift; sourceTree = "<group>"; };
-		BF9ADCD22779D0C500EC8EDE /* Motto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Motto.swift; sourceTree = "<group>"; };
-		BFAC3FA7277D0DF5003BE100 /* HistoryModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryModel.swift; sourceTree = "<group>"; };
 		BFAC3FA9277D27E1003BE100 /* NotificationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationModel.swift; sourceTree = "<group>"; };
 		BFAC3FAB277D3739003BE100 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -87,20 +73,6 @@
 				BF08B3FC277F1EFB00A9FCC1 /* Persistence.swift */,
 			);
 			path = CoreData;
-			sourceTree = "<group>";
-		};
-		BF08B3FF277F234D00A9FCC1 /* Trash */ = {
-			isa = PBXGroup;
-			children = (
-				BF10F63826199809007F1C68 /* FavoriteView.swift */,
-				BF10F62F26199742007F1C68 /* TimeNotification.swift */,
-				BF10F628261996C0007F1C68 /* ShowMeigen.swift */,
-				BF93D80C2623366800320E50 /* NotificationsListView.swift */,
-				BF10F6322619979D007F1C68 /* LocationNotification.swift */,
-				BF9ADCD22779D0C500EC8EDE /* Motto.swift */,
-				BFAC3FA7277D0DF5003BE100 /* HistoryModel.swift */,
-			);
-			path = Trash;
 			sourceTree = "<group>";
 		};
 		BF0C0E27277C577D0021C861 /* Model */ = {
@@ -152,7 +124,6 @@
 				BF0C0E28277C58580021C861 /* Views */,
 				BF0C0E27277C577D0021C861 /* Model */,
 				BF08B3FE277F22EE00A9FCC1 /* CoreData */,
-				BF08B3FF277F234D00A9FCC1 /* Trash */,
 				BF10F61926199412007F1C68 /* Assets.xcassets */,
 				BF10F61E26199412007F1C68 /* Info.plist */,
 				BF10F61B26199412007F1C68 /* Preview Content */,
@@ -197,6 +168,7 @@
 				BF10F60E2619940D007F1C68 /* Sources */,
 				BF10F60F2619940D007F1C68 /* Frameworks */,
 				BF10F6102619940D007F1C68 /* Resources */,
+				BF403BC72782F94C001AC05F /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -251,24 +223,38 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		BF403BC72782F94C001AC05F /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		BF10F60E2619940D007F1C68 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BF10F63926199809007F1C68 /* FavoriteView.swift in Sources */,
 				BF10F6182619940D007F1C68 /* ContentView.swift in Sources */,
 				BF0C0E2C277C79C20021C861 /* HomeView.swift in Sources */,
 				BF84B55B2782D22C005C81C8 /* MKMapView.swift in Sources */,
 				BFAC3FAA277D27E1003BE100 /* NotificationModel.swift in Sources */,
-				BF10F6332619979D007F1C68 /* LocationNotification.swift in Sources */,
 				BF08B3FB277F1E3F00A9FCC1 /* MeigenSupplement.xcdatamodeld in Sources */,
-				BFAC3FA8277D0DF5003BE100 /* HistoryModel.swift in Sources */,
 				BF15366627803DD7004C715F /* LocationListView.swift in Sources */,
-				BF93D80D2623366800320E50 /* NotificationsListView.swift in Sources */,
-				BF10F629261996C0007F1C68 /* ShowMeigen.swift in Sources */,
 				BF08B3FD277F1EFC00A9FCC1 /* Persistence.swift in Sources */,
-				BF9ADCD32779D0C500EC8EDE /* Motto.swift in Sources */,
 				BFAC3FAC277D3739003BE100 /* HistoryView.swift in Sources */,
 				BF10F6162619940D007F1C68 /* MeigenSupplementApp.swift in Sources */,
 				BF10F636261997CF007F1C68 /* LocationView.swift in Sources */,
@@ -279,7 +265,6 @@
 				BF0C0E2A277C61220021C861 /* LocationModel.swift in Sources */,
 				BF84B5592782C430005C81C8 /* LocationRowView.swift in Sources */,
 				BF08B401277F245200A9FCC1 /* CoreDataModel.swift in Sources */,
-				BF10F63026199742007F1C68 /* TimeNotification.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

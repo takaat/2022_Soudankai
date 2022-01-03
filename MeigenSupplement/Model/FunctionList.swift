@@ -12,7 +12,6 @@ import SwiftUI
 import MapKit
 
 func getMotto(completion: @escaping (String, String) -> Void) {
-
     struct ResultJson: Codable {
         let meigen: String?
         let auther: String?
@@ -21,7 +20,7 @@ func getMotto(completion: @escaping (String, String) -> Void) {
     guard let requestUrl = URL(string: "https://meigen.doodlenote.net/api/json.php?c=1") else { return }
     let request = URLRequest(url: requestUrl)
     let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
-    let task = session.dataTask(with: request) { (data,response,error) in session.finishTasksAndInvalidate()
+    let task = session.dataTask(with: request) { data, _, error in session.finishTasksAndInvalidate()
 
         if let error = error {
             print(error)
@@ -32,15 +31,13 @@ func getMotto(completion: @escaping (String, String) -> Void) {
             guard let data = data else { return }
             let results = try JSONDecoder().decode([ResultJson].self, from: data)
             completion(results[0].meigen ?? "", results[0].auther ?? "")
-        }
-        catch{
+        } catch {
             print(error)
             fatalError("エラーが出ました。エラー内容：" + error.localizedDescription)
         }
     }
 
     task.resume()
-
 }
 
 enum TypeOfTrigger {
@@ -70,7 +67,7 @@ func setNotification(meigen: String, auther: String, typeOfTrigger: TypeOfTrigge
     }
 }
 
-//func filterRequests(requests: [UNNotificationRequest]) -> [Date] {
+// func filterRequests(requests: [UNNotificationRequest]) -> [Date] {
 //    var tmpDates: [Date] = []
 //
 //    for request in requests {
@@ -85,7 +82,7 @@ func setNotification(meigen: String, auther: String, typeOfTrigger: TypeOfTrigge
 //        }
 //    }
 //    return tmpDates
-//}
+// }
 
 func filterRequests(requests: [UNNotificationRequest]) -> [(identifier: String, date: Date)] {
     var tempArray: [(String, Date)] = []
@@ -126,7 +123,7 @@ func filterRequests(requests: [UNNotificationRequest]) -> [(identifier: String, 
     return tempArray
 }
 
-//func save<T>(key: String, input:T) where T: Codable { // Json使用せずにAny型で処理ができないか要確認
+// func save<T>(key: String, input:T) where T: Codable { // Json使用せずにAny型で処理ができないか要確認
 //    let encoder = JSONEncoder()
 //    do {
 //        let encodedValue = try encoder.encode(input)
@@ -134,9 +131,9 @@ func filterRequests(requests: [UNNotificationRequest]) -> [(identifier: String, 
 //    } catch  {
 //        fatalError(error.localizedDescription)
 //    }
-//}
+// }
 //
-//func load<T>(key: String) -> T where T: Codable { // 出力するときは型を明示すること　Json使用せずにAny型で処理ができないか要確認
+// func load<T>(key: String) -> T where T: Codable { // 出力するときは型を明示すること　Json使用せずにAny型で処理ができないか要確認
 //    let decoder = JSONDecoder()
 //    guard let savedValue = UserDefaults.standard.data(forKey: key) else { return [Motto]() as! T }
 //    do {
@@ -144,10 +141,10 @@ func filterRequests(requests: [UNNotificationRequest]) -> [(identifier: String, 
 //    } catch {
 //        fatalError(error.localizedDescription)
 //    }
-//}
-//// ユーザーデフォルトの消去メソッドはあり。
+// }
+// // ユーザーデフォルトの消去メソッドはあり。
 //
-//enum TypeOfkey: String {
+// enum TypeOfkey: String {
 //    case history = "History"
 //    case notification = "Notification" // 通知一覧を作成するときに使用するかも
-//}
+// }

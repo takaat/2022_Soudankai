@@ -11,12 +11,16 @@ import MapKit
 
 struct MapView: UIViewRepresentable {
     let region: MKCoordinateRegion
-    let map = MKMapView()
+    private let map = MKMapView()
     typealias UIViewType = MKMapView
 
     func makeUIView(context: Context) -> MKMapView {
         // 地図を固定。ピンを打つ　もたつくのでスクロールビューかな
+        let pin = MKPointAnnotation()
+        pin.coordinate = region.center
         map.region = region
+        map.addAnnotation(pin)
+        map.isScrollEnabled = false
         return map
     }
 

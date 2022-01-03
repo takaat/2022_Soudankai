@@ -16,7 +16,7 @@ class CoreDataModel: NSObject, ObservableObject {
     @Published var auther = ""
     @Published var isFavorite = false
 
-    func addMotto(context : NSManagedObjectContext, meigen: String, auther: String) {
+    func addMotto(context: NSManagedObjectContext, meigen: String, auther: String) {
         let newMotto = Motto(context: context)
         newMotto.uuid = UUID()
         newMotto.timestamp = Date()
@@ -33,7 +33,6 @@ class CoreDataModel: NSObject, ObservableObject {
     }
 //　削除と並び替えは、HistoryView内で定義するか。
 
-    
 //    func deleteItems(offsets: IndexSet) {
 //        withAnimation {
 //            offsets.map { tasks[$0] }.forEach(context.delete)
