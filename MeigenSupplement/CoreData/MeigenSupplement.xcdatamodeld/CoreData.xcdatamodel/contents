@@ -2,17 +2,14 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21C52" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Motto" representedClassName="Motto" syncable="YES" codeGenerationType="class">
         <attribute name="auther" optional="YES" attributeType="String"/>
-        <attribute name="deliveryDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="inputLocationText" optional="YES" attributeType="String"/>
-        <attribute name="isDelivered" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="isFavorite" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="meigen" optional="YES" attributeType="String"/>
-        <attribute name="requestDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="requestIdentifier" optional="YES" attributeType="String"/>
+        <attribute name="searchLocationText" optional="YES" attributeType="String"/>
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
     </entity>
     <elements>
-        <element name="Motto" positionX="-54" positionY="-9" width="128" height="179"/>
+        <element name="Motto" positionX="-54" positionY="-9" width="128" height="134"/>
     </elements>
 </model>

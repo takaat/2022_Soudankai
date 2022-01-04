@@ -31,6 +31,11 @@ struct NotificationListView: View {
                 Spacer()
             }
             .navigationBarTitle("登録した通知", displayMode: .inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    EditButton()
+                }
+            }
         }
     }
 }

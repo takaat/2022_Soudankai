@@ -15,7 +15,6 @@ struct MapView: UIViewRepresentable {
     typealias UIViewType = MKMapView
 
     func makeUIView(context: Context) -> MKMapView {
-        // 地図を固定。ピンを打つ　もたつくのでスクロールビューかな
         let pin = MKPointAnnotation()
         pin.coordinate = region.center
         map.region = region

@@ -12,6 +12,8 @@ import MapKit
 class LocationModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var region: MKCoordinateRegion = .init(center: .init(),
                                                       span: .init(latitudeDelta: 0.003, longitudeDelta: 0.003))
+    @Published var isRegister = true
+    @Published var isFailureAlert = false
     private let locationManager = CLLocationManager()
     private var didUpdate: (CLLocation) -> Void = { _ in }
 
@@ -36,9 +38,13 @@ class LocationModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         searchRequest.region = inputRegion
         let search = MKLocalSearch(request: searchRequest)
         search.start(completionHandler: {response, _ in
-            guard let targetRegion = response?.mapItems.first?.placemark.coordinate else { return print("検索失敗！") }
+            guard let targetRegion = response?.mapItems.first?.placemark.coordinate else {
+                self.isFailureAlert = true
+                return print("検索失敗！") }
+            self.isRegister = false
             completion(targetRegion)
         })
+        // self.isRegister = false　ここに持ってきても良いかも！
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -48,6 +54,6 @@ class LocationModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("エラー発生:\(error.localizedDescription)")
+        print("ロケーションマネジャーにてエラー発生:\(error.localizedDescription)")
     }
 }

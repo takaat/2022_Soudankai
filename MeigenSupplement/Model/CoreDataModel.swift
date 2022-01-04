@@ -10,11 +10,11 @@ import CoreData
 
 class CoreDataModel: NSObject, ObservableObject {
 // パブリッシャー必要かな
-    @Published var id = UUID()
-    @Published var timestamp = Date()
-    @Published var meigen = ""
-    @Published var auther = ""
-    @Published var isFavorite = false
+//    @Published var id = UUID()
+//    @Published var timestamp = Date()
+//    @Published var meigen = ""
+//    @Published var auther = ""
+//    @Published var isFavorite = false
 
     func addMotto(context: NSManagedObjectContext, meigen: String, auther: String) {
         let newMotto = Motto(context: context)
@@ -28,6 +28,7 @@ class CoreDataModel: NSObject, ObservableObject {
             try context.save()
         } catch {
             let nsError = error as NSError
+            print("addMottoの失敗\(nsError)")
             print(nsError.localizedDescription)
         }
     }

@@ -17,10 +17,9 @@ struct LocationListView: View {
 
     var body: some View {
         List {
-            Text("LocationListView")
             ForEach(values, id: \.0) { value in
                 MapView(region: value.1)
-                    .frame(width: 300, height: 500)
+                    .frame(height: 300)
             }
             .onDelete { index in
                 deleteNotification(offset: index)
@@ -34,7 +33,7 @@ struct LocationListView: View {
         }
     }
 
-    private func deleteNotification(offset: IndexSet) {
+    private func deleteNotification(offset: IndexSet) {// 重複している
         let identifier = values[offset.first ?? 0].0
         let filterdArray = requests.filter { $0.identifier == identifier }
         let targetindex = requests.firstIndex(of: filterdArray[0])

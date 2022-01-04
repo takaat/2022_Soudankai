@@ -48,6 +48,7 @@ class NotificationModel: NSObject, ObservableObject, UNUserNotificationCenterDel
         let meigen = response.notification.request.content.body
         let auther = response.notification.request.content.subtitle
         coreDataModel.addMotto(context: context, meigen: meigen, auther: auther)
+        print("バックグランドで通知発火")
         completionHandler()
     }
 }

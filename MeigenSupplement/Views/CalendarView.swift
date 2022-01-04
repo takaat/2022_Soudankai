@@ -10,14 +10,12 @@ import SwiftUI
 struct CalendarView: View {
     @State private var date = Date()
     @State private var isShowAlert = false
+    private let dateRange = Date()...
 
     var body: some View {
-        Spacer()
         VStack(spacing: 30.0) {
-            DatePicker(
-                "通知を配信する日時",
-                selection: $date,
-                displayedComponents: [.hourAndMinute, .date])
+            Spacer()
+            DatePicker("", selection: $date, in: dateRange)
                 .datePickerStyle(GraphicalDatePickerStyle())
                 .padding()
 
@@ -29,9 +27,7 @@ struct CalendarView: View {
                                     typeOfTrigger: .calendar(dateComponents))}
                 isShowAlert = true
             }
-//            .cornerRadius(20)
             .buttonStyle(.bordered)
-//            .padding(/*@START_MENU_TOKEN@*/.horizontal/*@END_MENU_TOKEN@*/)
             .alert("登録完了",
                    isPresented: $isShowAlert,
                    actions: {},

@@ -16,11 +16,13 @@ struct CalendarListView: View {
 
     var body: some View {
         List {
-            Text("日時で登録した通知")
-                .font(.title)
             ForEach(values, id: \.0) { value in
-                Text(makeDateText(date: value.1))
-                    .font(.title2)
+                VStack(alignment: .leading, spacing: 10) {
+                    Text(makeDateText(date: value.1).0)
+                        .font(.title2)
+                    Text(makeDateText(date: value.1).1)
+                        .font(.title2)
+                }
             }
             .onDelete { index in
                 deleteNotification(offset: index)
@@ -34,11 +36,16 @@ struct CalendarListView: View {
         }
     }
 
-    private func makeDateText(date: Date) -> String {
+    private func makeDateText(date: Date) -> (String, String) {
+        var temp = ("", "")
         let formatter = DateFormatter()
         formatter.dateStyle = .full
+        formatter.timeStyle = .none
+        temp.0 = formatter.string(from: date)
+        formatter.dateStyle = .none
         formatter.timeStyle = .short
-        return formatter.string(from: date)
+        temp.1 = formatter.string(from: date)
+        return temp
     }
 
     private func deleteNotification(offset: IndexSet) {

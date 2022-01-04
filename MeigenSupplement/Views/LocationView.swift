@@ -41,6 +41,7 @@ struct LocationView: View {
                                 locationModel.region.center = targetRegion
                                 annotationItems.append(.init(coordinate: targetRegion))
                             }
+                        print("inputTextの値は、\(inputText)です")
                         closeKeyboard()
                     }
 
@@ -53,19 +54,26 @@ struct LocationView: View {
                         setNotification(meigen: meigen,
                                         auther: auther,
                                         typeOfTrigger: .location(region))}
+                    isShowAlert = true
+                    locationModel.isRegister = true
                 }
+                .disabled(locationModel.isRegister)  // 元に戻す処理考える
 
                 Button(action: {
                     locationModel.requestLocation()
                     locationModel.setup(didUpdate: { userLocation in
                         locationModel.region.center = userLocation.coordinate})
-                }, label: { Label("現在地", systemImage: "location.fill").foregroundColor(.red) })
+                }, label: { Label("現在地", systemImage: "location.fill").foregroundColor(.red).labelStyle(.iconOnly) })
             }
         }
         .alert("登録完了",
                isPresented: $isShowAlert,
                actions: {},
                message: {Text("場所指定で登録しました。")})
+        .alert("検索に失敗しました",
+               isPresented: $locationModel.isFailureAlert,
+               actions: {},
+               message: { Text("別のキーワードで検索してください。") })
         .onAppear {
             locationModel.startup()
             locationModel.setup { userLocation in locationModel.region.center = userLocation.coordinate }
