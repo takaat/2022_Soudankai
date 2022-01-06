@@ -76,6 +76,7 @@ struct LocationView: View {
                message: { Text("別のキーワードで検索してください。") })
         .onAppear {
             locationModel.startup()
+            locationModel.requestLocation()
             locationModel.setup { userLocation in locationModel.region.center = userLocation.coordinate }
         }
         .onTapGesture {

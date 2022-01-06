@@ -8,13 +8,7 @@
 import Foundation
 import CoreData
 
-class CoreDataModel: NSObject, ObservableObject {
-// パブリッシャー必要かな
-//    @Published var id = UUID()
-//    @Published var timestamp = Date()
-//    @Published var meigen = ""
-//    @Published var auther = ""
-//    @Published var isFavorite = false
+final class CoreDataModel: NSObject, ObservableObject {
 
     func addMotto(context: NSManagedObjectContext, meigen: String, auther: String) {
         let newMotto = Motto(context: context)
@@ -32,6 +26,7 @@ class CoreDataModel: NSObject, ObservableObject {
             print(nsError.localizedDescription)
         }
     }
+}
 //　削除と並び替えは、HistoryView内で定義するか。
 
 //    func deleteItems(offsets: IndexSet) {
@@ -40,4 +35,3 @@ class CoreDataModel: NSObject, ObservableObject {
 //                try? context.save()
 //        }
 //    }
-}

@@ -22,7 +22,7 @@ class LocationModel: NSObject, ObservableObject, CLLocationManagerDelegate {
         locationManager.requestWhenInUseAuthorization()
     }
 
-    func setup(didUpdate: @escaping (CLLocation) -> Void) {
+    func setup(didUpdate: @escaping (CLLocation) -> Void) { 
         self.didUpdate = didUpdate
     }
 

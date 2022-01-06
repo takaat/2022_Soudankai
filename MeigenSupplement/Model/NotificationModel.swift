@@ -11,10 +11,9 @@ import SwiftUI
 
 class NotificationModel: NSObject, ObservableObject, UNUserNotificationCenterDelegate {
     @Environment(\.managedObjectContext) private var context
-//    @Published var requests: [UNNotificationRequest] = []
     private let center = UNUserNotificationCenter.current()
-//    @EnvironmentObject private var cdmodel: CDModel //コンテントビューの子孫ではないため
-    let coreDataModel = CoreDataModel()
+//    @EnvironmentObject private var coreDataModel: CoreDataModel  コンテントビューの子孫ではないため
+    private let coreDataModel = CoreDataModel() // ⇦ここでインスタンスを作成しているのが理由かも。
 
     func startup() {
         center.delegate = self
@@ -24,12 +23,6 @@ class NotificationModel: NSObject, ObservableObject, UNUserNotificationCenterDel
             }
         }
     }
-
-//    func setRequests(comletion: @escaping ([UNNotificationRequest]) -> Void) {
-//        center.getPendingNotificationRequests { requests in
-//            comletion(requests)
-//        }
-//    }
 
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification,
