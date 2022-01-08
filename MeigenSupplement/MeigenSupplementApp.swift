@@ -11,9 +11,9 @@ import CoreLocation
 
 @main
 struct MeigenSupplementApp: App {
-    let persistenceController = PersistenceController.shared
+    private let persistenceController = PersistenceController.shared
     @StateObject private var notificationModel = NotificationModel()
-    @StateObject private var coredatamodel = CoreDataModel()
+    @StateObject private var coreDataModel = CoreDataModel()
     @Environment(\.scenePhase) var scenePhase
 //    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
@@ -22,13 +22,14 @@ struct MeigenSupplementApp: App {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .environmentObject(notificationModel)
-                .environmentObject(coredatamodel)
+                .environmentObject(coreDataModel)
                 .onChange(of: scenePhase) { newScenePhase in
                     switch newScenePhase {
-                    case .inactive: break
+                    case .inactive:
                          // save(key: TypeOfkey.history.rawValue, input: historyModel.mottos)
-                    case .active:
                         notificationModel.startup()
+                    case .active:
+                        break
                     case .background: break
 
                     default: break

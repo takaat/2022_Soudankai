@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CalendarView: View {
     @State private var date = Date()
-    @State private var isShowAlert = false
+    @State private var isShowRegisteredAlert = false
     private let dateRange = Date()...
 
     var body: some View {
@@ -25,11 +25,11 @@ struct CalendarView: View {
                     setNotification(meigen: meign,
                                     auther: auther,
                                     typeOfTrigger: .calendar(dateComponents))}
-                isShowAlert = true
+                isShowRegisteredAlert = true
             }
             .buttonStyle(.bordered)
             .alert("登録完了",
-                   isPresented: $isShowAlert,
+                   isPresented: $isShowRegisteredAlert,
                    actions: {},
                    message: {Text("時間指定で登録しました。")})
             Spacer()

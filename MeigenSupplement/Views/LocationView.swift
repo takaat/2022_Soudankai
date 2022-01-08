@@ -18,7 +18,7 @@ struct LocationView: View {
     @StateObject var locationModel = LocationModel()
     @State private var inputText = ""
     @State private var preRegion: CLLocationCoordinate2D?
-    @State private var isShowAlert = false
+    @State private var isShowRegisterdAlert = false
     @State var annotationItems: [AnnotationItemStruct] = []
 
     var body: some View {
@@ -54,10 +54,10 @@ struct LocationView: View {
                         setNotification(meigen: meigen,
                                         auther: auther,
                                         typeOfTrigger: .location(region))}
-                    isShowAlert = true
-                    locationModel.isRegister = true
+                    isShowRegisterdAlert = true
+                    locationModel.isRegisterButton = true
                 }
-                .disabled(locationModel.isRegister)  // 元に戻す処理考える
+                .disabled(locationModel.isRegisterButton)  // 元に戻す処理考える
 
                 Button(action: {
                     locationModel.requestLocation()
@@ -67,10 +67,10 @@ struct LocationView: View {
             }
         }
         .alert("登録完了",
-               isPresented: $isShowAlert,
+               isPresented: $isShowRegisterdAlert,
                actions: {},
                message: {Text("場所指定で登録しました。")})
-        .alert("検索に失敗しました",
+        .alert("\(inputText)は、見つかりませんでした。",
                isPresented: $locationModel.isFailureAlert,
                actions: {},
                message: { Text("別のキーワードで検索してください。") })

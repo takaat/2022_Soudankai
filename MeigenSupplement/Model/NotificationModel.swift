@@ -10,10 +10,10 @@ import UserNotifications
 import SwiftUI
 
 class NotificationModel: NSObject, ObservableObject, UNUserNotificationCenterDelegate {
-    @Environment(\.managedObjectContext) private var context
+    private let context = PersistenceController.shared.container.viewContext
+    // @Environmentは親ビューから子ビューに伝播するものなのでクラスには伝播しない。よってクラス内に新たにcontextを宣言する必要がある。
+    private let coreDataModel = CoreDataModel()
     private let center = UNUserNotificationCenter.current()
-//    @EnvironmentObject private var coreDataModel: CoreDataModel  コンテントビューの子孫ではないため
-    private let coreDataModel = CoreDataModel() // ⇦ここでインスタンスを作成しているのが理由かも。
 
     func startup() {
         center.delegate = self
@@ -38,10 +38,16 @@ class NotificationModel: NSObject, ObservableObject, UNUserNotificationCenterDel
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
-        let meigen = response.notification.request.content.body
-        let auther = response.notification.request.content.subtitle
-        coreDataModel.addMotto(context: context, meigen: meigen, auther: auther)
-        print("バックグランドで通知発火")
+        switch response.actionIdentifier {
+        case "action":
+            let meigen = response.notification.request.content.body
+            let auther = response.notification.request.content.subtitle
+            coreDataModel.addMotto(context: context, meigen: meigen, auther: auther)
+            print("didReciveのactionを実行した")
+        default:
+            break
+        }
         completionHandler()
+        print("バックグランドで通知発火")
     }
 }

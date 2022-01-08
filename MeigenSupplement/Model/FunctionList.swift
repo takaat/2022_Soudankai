@@ -24,7 +24,7 @@ func getMotto(completion: @escaping (String, String) -> Void) {
 
         if let error = error {
             print(error)
-            fatalError("エラーが出ました。エラー内容：" + error.localizedDescription)
+            fatalError("エラーが出ました。エラー内容：\(error.localizedDescription)")
         }
 
         do {
@@ -33,13 +33,13 @@ func getMotto(completion: @escaping (String, String) -> Void) {
             completion(results[0].meigen ?? "", results[0].auther ?? "")
         } catch {
             print(error)
-            fatalError("エラーが出ました。エラー内容：" + error.localizedDescription)
+            fatalError("エラーが出ました。エラー内容：\(error.localizedDescription)")
         }
     }
 
     task.resume()
 }
-
+// MARK: -
 enum TypeOfTrigger {
     case calendar(DateComponents)
     case location(CLRegion)
@@ -53,12 +53,19 @@ enum TypeOfTrigger {
         }
     }
 }
-
+// MARK: -
 func setNotification(meigen: String, auther: String, typeOfTrigger: TypeOfTrigger) {
     let center = UNUserNotificationCenter.current()
     let content = UNMutableNotificationContent()
+    let action = UNNotificationAction(identifier: "action", title: "アプリで確認", options: .foreground)
+    let category = UNNotificationCategory(identifier: "category",
+                                          actions: [action],
+                                          intentIdentifiers: [""],
+                                          options: [])
+    center.setNotificationCategories([category])
     content.subtitle = auther
     content.body = meigen
+    content.categoryIdentifier = "category"
     let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: typeOfTrigger.trigger)
     center.add(request) { error in
         if let error = error {
@@ -66,7 +73,7 @@ func setNotification(meigen: String, auther: String, typeOfTrigger: TypeOfTrigge
         }
     }
 }
-
+// MARK: -
 func filterRequests(requests: [UNNotificationRequest]) -> [(identifier: String, date: Date)] {
     var tempArray: [(String, Date)] = []
     var tempTuple = ("", Date())
@@ -85,7 +92,7 @@ func filterRequests(requests: [UNNotificationRequest]) -> [(identifier: String, 
     }
     return tempArray
 }
-
+// MARK: -
 func filterRequests(requests: [UNNotificationRequest]) -> [(identifier: String, data: MKCoordinateRegion)] {
     var tempArray: [(String, MKCoordinateRegion)] = []
     var tempTuple = ("", MKCoordinateRegion())

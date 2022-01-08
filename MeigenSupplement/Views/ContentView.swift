@@ -12,7 +12,6 @@ struct ContentView: View {
         case calendarView, locationView, homeView, notificationListView, historyView
     }
 
-    @State private var show = false
     @State private var selection: Tag = .homeView
 
     var body: some View {

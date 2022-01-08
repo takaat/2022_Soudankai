@@ -8,8 +8,7 @@
 import Foundation
 import CoreData
 
-final class CoreDataModel: NSObject, ObservableObject {
-
+class CoreDataModel: NSObject, ObservableObject {
     func addMotto(context: NSManagedObjectContext, meigen: String, auther: String) {
         let newMotto = Motto(context: context)
         newMotto.uuid = UUID()
@@ -21,9 +20,8 @@ final class CoreDataModel: NSObject, ObservableObject {
         do {
             try context.save()
         } catch {
-            let nsError = error as NSError
-            print("addMottoの失敗\(nsError)")
-            print(nsError.localizedDescription)
+            let error = error
+            print("addMottoの失敗\(error)\n\(error.localizedDescription)")
         }
     }
 }
