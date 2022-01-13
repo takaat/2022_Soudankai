@@ -14,8 +14,17 @@ class LocationModel: NSObject, ObservableObject, CLLocationManagerDelegate {
                                                       span: .init(latitudeDelta: 0.003, longitudeDelta: 0.003))
     @Published var isRegisterButton = true
     @Published var isFailureAlert = false
+    @Published var inputText = ""
+    @Published var centerRegion: CLLocationCoordinate2D = .init()
+    @Published var isShowRegisterdAlert = false
+    @Published var annotationItems: [AnnotationItemStruct] = []
     private let locationManager = CLLocationManager()
     private var didUpdate: (CLLocation) -> Void = { _ in }
+
+    struct AnnotationItemStruct: Identifiable {
+        let id = UUID()
+        let coordinate: CLLocationCoordinate2D
+    }
 
     func startup() {
         locationManager.delegate = self
@@ -44,7 +53,11 @@ class LocationModel: NSObject, ObservableObject, CLLocationManagerDelegate {
             self.isRegisterButton = false
             completion(targetRegion)
         })
-        // self.isRegister = false　ここに持ってきても良いかも！
+        // FIXME: self.isRegister = false　ここに持ってきても良いかも！
+    }
+
+    func closeKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {

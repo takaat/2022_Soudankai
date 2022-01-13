@@ -11,17 +11,18 @@ import MapKit
 struct LocationListView: View {
     @State private var requests: [UNNotificationRequest] = []
 
-    var values: [(String, MKCoordinateRegion)] {
+    var listData: [(String, MKCoordinateRegion)] {
         filterRequests(requests: requests)
     }
 
     var body: some View {
         List {
-            ForEach(values, id: \.0) { value in
+            ForEach(listData, id: \.0) { value in
                 MapView(region: value.1)
                     .frame(height: 300)
             }
             .onDelete { index in
+//                deleteNotification(offset: index, requests: requests, lists: listData)
                 deleteNotification(offset: index)
             }
         }
@@ -34,7 +35,7 @@ struct LocationListView: View {
     }
 
     private func deleteNotification(offset: IndexSet) {// 重複している
-        let identifier = values[offset.first ?? 0].0
+        let identifier = listData[offset.first ?? 0].0
         let filterdArray = requests.filter { $0.identifier == identifier }
         let targetindex = requests.firstIndex(of: filterdArray[0])
         requests.remove(at: targetindex ?? 0)

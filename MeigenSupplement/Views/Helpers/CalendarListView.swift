@@ -10,21 +10,22 @@ import SwiftUI
 struct CalendarListView: View {
     @State private var requests: [UNNotificationRequest] = []
 
-    var values: [(String, Date)] {
+    var listData: [(String, Date)] {
         filterRequests(requests: requests) // 日付順に並び替えできないか試す。
     }
 
     var body: some View {
         List {
-            ForEach(values, id: \.0) { value in
+            ForEach(listData, id: \.0) { element in
                 VStack(alignment: .leading, spacing: 10) {
-                    Text(makeDateText(date: value.1).0)
+                    Text(makeDateText(date: element.1).0)
                         .font(.title2)
-                    Text(makeDateText(date: value.1).1)
+                    Text(makeDateText(date: element.1).1)
                         .font(.title2)
                 }
             }
             .onDelete { index in
+//                deleteNotification(offset: index, requests: requests, lists: listData)
                 deleteNotification(offset: index)
             }
         }
@@ -37,19 +38,18 @@ struct CalendarListView: View {
     }
 
     private func makeDateText(date: Date) -> (String, String) {
-        var temp = ("", "")
         let formatter = DateFormatter()
         formatter.dateStyle = .full
         formatter.timeStyle = .none
-        temp.0 = formatter.string(from: date)
+        let dates = formatter.string(from: date)
         formatter.dateStyle = .none
         formatter.timeStyle = .short
-        temp.1 = formatter.string(from: date)
-        return temp
+        let time = formatter.string(from: date)
+        return (dates, time)
     }
 
     private func deleteNotification(offset: IndexSet) {
-        let identifier = values[offset.first ?? 0].0 // 削除対象のidentifierを取り出す
+        let identifier = listData[offset.first ?? 0].0 // 削除対象のidentifierを取り出す
         let filterdArray = requests.filter { $0.identifier == identifier } // requestsの配列からidentifierが一致する要素を探す
         let targetindex = requests.firstIndex(of: filterdArray[0]) // indexを取り出して削除する。
         requests.remove(at: targetindex ?? 0)

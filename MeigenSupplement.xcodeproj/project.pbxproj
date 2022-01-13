@@ -26,6 +26,7 @@
 		BF84B55B2782D22C005C81C8 /* MKMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF84B55A2782D22C005C81C8 /* MKMapView.swift */; };
 		BFAC3FAA277D27E1003BE100 /* NotificationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAC3FA9277D27E1003BE100 /* NotificationModel.swift */; };
 		BFAC3FAC277D3739003BE100 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFAC3FAB277D3739003BE100 /* HistoryView.swift */; };
+		BFD94AEA2790379800D0A130 /* LocationRegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD94AE92790379800D0A130 /* LocationRegisterView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,7 @@
 		BF84B55A2782D22C005C81C8 /* MKMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MKMapView.swift; sourceTree = "<group>"; };
 		BFAC3FA9277D27E1003BE100 /* NotificationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationModel.swift; sourceTree = "<group>"; };
 		BFAC3FAB277D3739003BE100 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		BFD94AE92790379800D0A130 /* LocationRegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationRegisterView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +150,7 @@
 		BF15366727803DE8004C715F /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				BFD94AE92790379800D0A130 /* LocationRegisterView.swift */,
 				BF15366127803214004C715F /* CalendarListView.swift */,
 				BF15366527803DD7004C715F /* LocationListView.swift */,
 				BF84B55A2782D22C005C81C8 /* MKMapView.swift */,
@@ -255,6 +258,7 @@
 				BFAC3FAC277D3739003BE100 /* HistoryView.swift in Sources */,
 				BF10F6162619940D007F1C68 /* MeigenSupplementApp.swift in Sources */,
 				BF10F636261997CF007F1C68 /* LocationView.swift in Sources */,
+				BFD94AEA2790379800D0A130 /* LocationRegisterView.swift in Sources */,
 				BF15366427803D3A004C715F /* NotificationListView.swift in Sources */,
 				BF15366227803214004C715F /* CalendarListView.swift in Sources */,
 				BF159DB12620925B0016A281 /* CalendarView.swift in Sources */,

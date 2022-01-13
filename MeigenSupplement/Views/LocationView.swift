@@ -10,67 +10,27 @@ import MapKit
 import CoreLocation
 
 struct LocationView: View {
-    struct AnnotationItemStruct: Identifiable {
-        let id = UUID()
-        let coordinate: CLLocationCoordinate2D
-    }
-
     @StateObject var locationModel = LocationModel()
-    @State private var inputText = ""
-    @State private var preRegion: CLLocationCoordinate2D?
-    @State private var isShowRegisterdAlert = false
-    @State var annotationItems: [AnnotationItemStruct] = []
 
     var body: some View {
         VStack {
             Map(coordinateRegion: $locationModel.region,
                 showsUserLocation: true,
-                annotationItems: annotationItems) { item in
+                annotationItems: locationModel.annotationItems) { item in
                 MapMarker(coordinate: item.coordinate, tint: .purple)
             }
             .ignoresSafeArea(edges: .top)
-
-            HStack {
-                TextField("", text: $inputText, prompt: Text("場所を入力"))
-                    .padding()
-                    .onSubmit {
-                        locationModel.localSearch(
-                            inputRegion: locationModel.region,
-                            inputText: inputText) { targetRegion in
-                                preRegion = targetRegion
-                                locationModel.region.center = targetRegion
-                                annotationItems.append(.init(coordinate: targetRegion))
-                            }
-                        print("inputTextの値は、\(inputText)です")
-                        closeKeyboard()
-                    }
-
-                Button("登録") {
-                    let region = CLCircularRegion(center: preRegion ?? .init(),
-                                                  radius: 1000,
-                                                  identifier: UUID().uuidString)
-                    region.notifyOnExit = false
-                    getMotto { meigen, auther in
-                        setNotification(meigen: meigen,
-                                        auther: auther,
-                                        typeOfTrigger: .location(region))}
-                    isShowRegisterdAlert = true
-                    locationModel.isRegisterButton = true
-                }
-                .disabled(locationModel.isRegisterButton)  // 元に戻す処理考える
-
-                Button(action: {
-                    locationModel.requestLocation()
-                    locationModel.setup(didUpdate: { userLocation in
-                        locationModel.region.center = userLocation.coordinate})
-                }, label: { Label("現在地", systemImage: "location.fill").foregroundColor(.red).labelStyle(.iconOnly) })
+            .onTapGesture {
+                locationModel.closeKeyboard()
             }
+
+            LocationRegisterView(locationModel: locationModel)
         }
         .alert("登録完了",
-               isPresented: $isShowRegisterdAlert,
+               isPresented: $locationModel.isShowRegisterdAlert,
                actions: {},
                message: {Text("場所指定で登録しました。")})
-        .alert("\(inputText)は、見つかりませんでした。",
+        .alert("\(locationModel.inputText)は、見つかりませんでした。",
                isPresented: $locationModel.isFailureAlert,
                actions: {},
                message: { Text("別のキーワードで検索してください。") })
@@ -79,13 +39,6 @@ struct LocationView: View {
             locationModel.requestLocation()
             locationModel.setup { userLocation in locationModel.region.center = userLocation.coordinate }
         }
-        .onTapGesture {
-            closeKeyboard()
-        }
-    }
-
-    private func closeKeyboard() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
 
