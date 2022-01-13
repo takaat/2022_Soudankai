@@ -12,6 +12,7 @@ struct HomeView: View {
     @State private var meigen = ""
     @State private var auther = ""
     @EnvironmentObject private var coreDataModel: CoreDataModel
+    @EnvironmentObject private var notificationModel: NotificationModel
 
     var body: some View {
         NavigationView {
@@ -25,7 +26,7 @@ struct HomeView: View {
             }
         }
         .onAppear {
-            getMotto { meigen, auther in
+            notificationModel.getMotto { meigen, auther in
                 self.meigen = meigen
                 self.auther = auther
                 coreDataModel.addMotto(context: context,
@@ -40,5 +41,6 @@ struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
             .environmentObject(CoreDataModel())
+            .environmentObject(NotificationModel())
     }
 }

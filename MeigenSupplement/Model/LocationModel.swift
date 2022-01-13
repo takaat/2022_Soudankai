@@ -14,9 +14,9 @@ class LocationModel: NSObject, ObservableObject, CLLocationManagerDelegate {
                                                       span: .init(latitudeDelta: 0.003, longitudeDelta: 0.003))
     @Published var isRegisterButton = true
     @Published var isFailureAlert = false
+    @Published var isShowRegisterdAlert = false
     @Published var inputText = ""
     @Published var centerRegion: CLLocationCoordinate2D = .init()
-    @Published var isShowRegisterdAlert = false
     @Published var annotationItems: [AnnotationItemStruct] = []
     private let locationManager = CLLocationManager()
     private var didUpdate: (CLLocation) -> Void = { _ in }

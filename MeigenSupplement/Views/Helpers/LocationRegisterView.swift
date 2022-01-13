@@ -10,6 +10,7 @@ import CoreLocation
 
 struct LocationRegisterView: View {
     @ObservedObject var locationModel: LocationModel
+    @EnvironmentObject private var notificationModel: NotificationModel
 
     var body: some View {
         HStack {
@@ -33,8 +34,8 @@ struct LocationRegisterView: View {
                                               radius: 1000,
                                               identifier: UUID().uuidString)
                 region.notifyOnExit = false
-                getMotto { meigen, auther in
-                    setNotification(meigen: meigen,
+                notificationModel.getMotto { meigen, auther in
+                    notificationModel.setNotification(meigen: meigen,
                                     auther: auther,
                                     typeOfTrigger: .location(region))}
                 locationModel.isShowRegisterdAlert = true

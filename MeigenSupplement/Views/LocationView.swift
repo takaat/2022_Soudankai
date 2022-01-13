@@ -10,7 +10,7 @@ import MapKit
 import CoreLocation
 
 struct LocationView: View {
-    @StateObject var locationModel = LocationModel()
+    @StateObject private var locationModel = LocationModel()
 
     var body: some View {
         VStack {
