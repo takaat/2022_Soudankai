@@ -14,7 +14,7 @@ struct LocationRegisterView: View {
 
     var body: some View {
         HStack {
-            TextField("", text: $locationModel.inputText, prompt: Text("場所を入力"))
+            TextField("", text: $locationModel.inputText, prompt: Text("通知する場所を入力"))
                 .padding()
                 .textFieldStyle(.roundedBorder)
                 .onSubmit {
@@ -42,12 +42,6 @@ struct LocationRegisterView: View {
                 locationModel.isRegisterButton = true
             }
             .disabled(locationModel.isRegisterButton)
-            // MARK: 元に戻す処理考える -
-            Button(action: {
-                locationModel.requestLocation()
-                locationModel.setup(didUpdate: { userLocation in
-                    locationModel.region.center = userLocation.coordinate})
-            }, label: { Label("現在地", systemImage: "location.fill").foregroundColor(.red).labelStyle(.iconOnly) })
         }
     }
 }

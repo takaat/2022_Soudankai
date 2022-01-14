@@ -21,7 +21,8 @@ struct CalendarView: View {
                 .padding()
 
             Button("登 録") {
-                let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: selectedDate)
+                let dateComponents = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute],
+                                                                     from: selectedDate)
                 notificationModel.getMotto { meign, auther in
                     notificationModel.setNotification(meigen: meign,
                                     auther: auther,
