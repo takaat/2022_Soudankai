@@ -8,7 +8,7 @@
 import SwiftUI
 import MapKit
 import CoreLocation
-
+// MARK: 場所で通知を登録する画面
 struct LocationView: View {
     @StateObject private var locationModel = LocationModel()
 

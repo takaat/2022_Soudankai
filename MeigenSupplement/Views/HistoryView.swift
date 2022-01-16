@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+// MARK: 履歴を表示する画面
 struct HistoryView: View {
     @Environment(\.managedObjectContext) private var context
     @FetchRequest(

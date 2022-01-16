@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+// MARK: 日時で通知を登録する画面
 struct CalendarView: View {
     @State private var selectedDate = Date()
     @State private var isShowRegisteredAlert = false

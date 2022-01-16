@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 import MapKit
-
+// MARK: LocationListViewのうち１行単位の地図を表示する画面
 struct MapView: UIViewRepresentable {
     let region: MKCoordinateRegion
     private let map = MKMapView()

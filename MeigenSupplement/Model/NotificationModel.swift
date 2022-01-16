@@ -11,10 +11,9 @@ import CoreLocation
 
 class NotificationModel: NSObject, ObservableObject, UNUserNotificationCenterDelegate {
     private let context = PersistenceController.shared.container.viewContext
-    // @Environmentは親ビューから子ビューに伝播するものなのでクラスには伝播しない。よってクラス内に新たにcontextを宣言する必要がある。
     private let coreDataModel = CoreDataModel()
     private let center = UNUserNotificationCenter.current()
-
+// MARK: 通知を登録するためのトリガーを生成
     enum TypeOfTrigger {
         case calendar(DateComponents)
         case location(CLRegion)
@@ -37,7 +36,7 @@ class NotificationModel: NSObject, ObservableObject, UNUserNotificationCenterDel
             }
         }
     }
-
+// MARK: APIからmeigenとautherを取得
     func getMotto(completion: @escaping (String, String) -> Void) {
         struct ResultJson: Codable {
             let meigen: String?
@@ -66,7 +65,7 @@ class NotificationModel: NSObject, ObservableObject, UNUserNotificationCenterDel
 
         task.resume()
     }
-
+// MARK: 通知を登録する処理
     func setNotification(meigen: String, auther: String, typeOfTrigger: TypeOfTrigger) {
         let center = UNUserNotificationCenter.current()
         let content = UNMutableNotificationContent()
@@ -89,7 +88,7 @@ class NotificationModel: NSObject, ObservableObject, UNUserNotificationCenterDel
             }
         }
     }
-
+// MARK: 通知が発火したら、CoreDataに登録する処理
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification,
                                 withCompletionHandler completionHandler:
@@ -100,7 +99,7 @@ class NotificationModel: NSObject, ObservableObject, UNUserNotificationCenterDel
         completionHandler([.banner, .sound, .list])
         print("フォアグランドで通知発火")
     }
-
+// MARK: 通知が発火したら、CoreDataに登録する処理
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {

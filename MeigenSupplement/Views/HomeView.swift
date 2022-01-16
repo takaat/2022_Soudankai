@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+// MARK: アプリ起動時の画面
 struct HomeView: View {
     @Environment(\.managedObjectContext) private var context
     @State private var meigen = ""

@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+// MARK: 登録した通知を表示する画面
 struct NotificationListView: View {
     private let types = ["日時", "場所"]
     @State private var selection = "日時"

@@ -6,12 +6,12 @@
 //
 
 import SwiftUI
-
+// MARK: 日時で登録した通知を表示する画面
 struct CalendarListView: View {
     @State private var requests: [UNNotificationRequest] = []
 
     var listData: [(String, Date)] {
-        filterRequests(requests: requests) // 日付順に並び替えできないか試す。
+        filterRequests(requests: requests)
     }
 
     var body: some View {
@@ -25,7 +25,6 @@ struct CalendarListView: View {
                 }
             }
             .onDelete { index in
-//                deleteNotification(offset: index, requests: requests, lists: listData)
                 deleteNotification(offset: index)
             }
         }
@@ -49,9 +48,9 @@ struct CalendarListView: View {
     }
 
     private func deleteNotification(offset: IndexSet) {
-        let identifier = listData[offset.first ?? 0].0 // 削除対象のidentifierを取り出す
-        let filterdArray = requests.filter { $0.identifier == identifier } // requestsの配列からidentifierが一致する要素を探す
-        let targetindex = requests.firstIndex(of: filterdArray[0]) // indexを取り出して削除する。
+        let identifier = listData[offset.first ?? 0].0
+        let filterdArray = requests.filter { $0.identifier == identifier }
+        let targetindex = requests.firstIndex(of: filterdArray[0])
         requests.remove(at: targetindex ?? 0)
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
     }

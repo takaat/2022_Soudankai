@@ -38,7 +38,7 @@ class LocationModel: NSObject, ObservableObject, CLLocationManagerDelegate {
     func requestLocation() {
         locationManager.requestLocation()
     }
-
+// MARK: キーワードから場所を検索する
     func localSearch(inputRegion: MKCoordinateRegion,
                      inputText: String,
                      completion: @escaping (CLLocationCoordinate2D) -> Void) {
@@ -53,7 +53,6 @@ class LocationModel: NSObject, ObservableObject, CLLocationManagerDelegate {
             self.isRegisterButton = false
             completion(targetRegion)
         })
-        // FIXME: self.isRegister = false　ここに持ってきても良いかも！
     }
 
     func closeKeyboard() {

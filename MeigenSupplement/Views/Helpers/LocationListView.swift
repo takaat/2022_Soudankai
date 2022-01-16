@@ -7,7 +7,7 @@
 
 import SwiftUI
 import MapKit
-
+// MARK: 場所で登録した通知を表示する画面
 struct LocationListView: View {
     @State private var requests: [UNNotificationRequest] = []
 
@@ -22,7 +22,6 @@ struct LocationListView: View {
                     .frame(height: 300)
             }
             .onDelete { index in
-//                deleteNotification(offset: index, requests: requests, lists: listData)
                 deleteNotification(offset: index)
             }
         }
@@ -34,7 +33,7 @@ struct LocationListView: View {
         }
     }
 
-    private func deleteNotification(offset: IndexSet) {// 重複している
+    private func deleteNotification(offset: IndexSet) {
         let identifier = listData[offset.first ?? 0].0
         let filterdArray = requests.filter { $0.identifier == identifier }
         let targetindex = requests.firstIndex(of: filterdArray[0])

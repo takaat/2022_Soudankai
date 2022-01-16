@@ -7,7 +7,7 @@
 
 import SwiftUI
 import CoreLocation
-
+// MARK: NotificationListViewの下部にあるテキストフィールドと登録ボタンからなる部品
 struct LocationRegisterView: View {
     @ObservedObject var locationModel: LocationModel
     @EnvironmentObject private var notificationModel: NotificationModel

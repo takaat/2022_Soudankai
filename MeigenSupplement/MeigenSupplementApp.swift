@@ -15,7 +15,6 @@ struct MeigenSupplementApp: App {
     @StateObject private var notificationModel = NotificationModel()
     @StateObject private var coreDataModel = CoreDataModel()
     @Environment(\.scenePhase) var scenePhase
-//    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     var body: some Scene {
         WindowGroup {
@@ -26,7 +25,6 @@ struct MeigenSupplementApp: App {
                 .onChange(of: scenePhase) { newScenePhase in
                     switch newScenePhase {
                     case .inactive:
-                         // save(key: TypeOfkey.history.rawValue, input: historyModel.mottos)
                         notificationModel.startup()
                     case .active:
                         break

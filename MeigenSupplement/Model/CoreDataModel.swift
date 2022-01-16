@@ -7,7 +7,7 @@
 
 import Foundation
 import CoreData
-
+// MARK: CoreDataに登録する処理
 class CoreDataModel: NSObject, ObservableObject {
     func addMotto(context: NSManagedObjectContext, meigen: String, auther: String) {
         let newMotto = Motto(context: context)
@@ -25,11 +25,3 @@ class CoreDataModel: NSObject, ObservableObject {
         }
     }
 }
-//　削除と並び替えは、HistoryView内で定義するか。
-
-//    func deleteItems(offsets: IndexSet) {
-//        withAnimation {
-//            offsets.map { tasks[$0] }.forEach(context.delete)
-//                try? context.save()
-//        }
-//    }
